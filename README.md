@@ -9,5 +9,8 @@ Layout:
         Interface - Interface tools
         Renderer - Actual renderer (Pineapple)
     build - Build files
+        bin - Executables and libraries
+        obj - Object file byproducts
+        include - Header files
 
 Currently using MinGW-g++ and MSYS-make
