@@ -1,6 +1,8 @@
 #include <map>
 #include <string>
 #include <glm/glm.hpp>
+
+#include "Pineapple/Renderer.hpp"
 #include "Pineapple/Camera.hpp"
 
 #ifndef _Pineapple
@@ -10,10 +12,12 @@ typedef std::map<std::string, std::string> StringMap;
 
 class Pineapple {
     protected:
-        Camera camera;
+        Renderer * renderer;
     public:
         Pineapple();
-        Camera getCamera() { return camera; };
+
+        Renderer * getRenderer();
+        void render(float[]);
 };
 
 #endif

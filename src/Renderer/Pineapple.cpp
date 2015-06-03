@@ -1,7 +1,19 @@
+#include <GLFW/glfw3.h>
+
 #include "Pineapple/Pineapple.hpp"
+#include "Pineapple/OpenGLRenderer.hpp"
 
 Pineapple::Pineapple() {
-    camera.viewport = glm::ivec2(640, 480);
-    camera.position = glm::vec3(8.f, 4.f, 8.f);
-    camera.orientation = glm::vec3(0.f, 0.f, 0.f);
+    renderer = new GLRenderer();
+}
+
+Renderer * Pineapple::getRenderer() {
+    return renderer;
+}
+
+/**
+    Render an image to an array.
+*/
+void Pineapple::render(float imageBuffer[]) {
+    renderer->render(imageBuffer);
 }

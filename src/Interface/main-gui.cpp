@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Pineapple/Pineapple.hpp"
+
 static void error_callback(int error, const char* message) {
     fputs(message, stderr);
 }
@@ -14,14 +16,14 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 int main(void) {
     // Init GLFW
-    
+
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }
 
     glfwSetErrorCallback(error_callback);
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Renderer", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(640, 480, "Renderer", NULL, NULL);
 
     if (!window) {
         glfwTerminate();
@@ -32,29 +34,19 @@ int main(void) {
     glfwSwapInterval(1);
     glfwSetKeyCallback(window, key_callback);
 
+    Pineapple p;
+    int width, height, newWidth, newHeight;
+    float dummy[1];
     while (!glfwWindowShouldClose(window)) {
-        glfwGetFramebufferSize(window, &width, &height);
-        ratio = (float) width / (float) height;
+        glfwGetFramebufferSize(window, &newWidth, &newHeight);
 
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
+        if (newWidth!=width || newHeight!=height) {
+            p.getRenderer()->setViewport(newWidth, newHeight);
+            width = newWidth;
+            height = newHeight;
+        }
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
-
-        glBegin(GL_TRIANGLES);
-        glColor3f(1.f, 0.f, 0.f);
-        glVertex3f(-0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 1.f, 0.f);
-        glVertex3f(0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 0.f, 1.f);
-        glVertex3f(0.f, 0.6f, 0.f);
-        glEnd();
+        p.render(dummy);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -1,6 +1,13 @@
-#include <Pineapple/Renderer.h>
+#include "Pineapple/Renderer.hpp"
 
 Renderer::Renderer() {
-    width = 640;
-    height = 480;
+
+}
+
+void Renderer::render(float imageBuffer[]) {
+    
+}
+
+void Renderer::setViewport(int width, int height) {
+    camera.viewport = glm::ivec2(width, height);
 }
