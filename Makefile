@@ -5,23 +5,21 @@ CC=g++
 BUILD=./build
 SRC=./src
 LIBRARY=-L "./lib" -L "./build"
-INCLUDE=-I "./include" -I "./src/Renderer/include"
+INCLUDE=./include
 
 # Specific Locations
 BUILD_BIN=$(BUILD)/bin
 BUILD_OBJ=$(BUILD)/obj
-BUILD_INCLUDE=$(BUILD)/include
 SRC_INTERFACE=$(SRC)/Interface
-SRC_INCLUDE=$(SRC)/Renderer/include
-SRC_RENDERER=$(SRC)/Renderer/source
+SRC_RENDERER=$(SRC)/Renderer
 
 SRC_RENDERER_SOURCES=$(wildcard $(SRC_RENDERER)/*.cpp)
 SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:.cpp=.o)))
 
 # Specific links
 LINK_RENDERER=
-LINK_CLI=
-LINK_GUI=-lglfw3 -lopengl32 -lgdi32
+LINK_CLI=-lPineapple
+LINK_GUI=-lPineapple -lglfw3 -lopengl32 -lgdi32
 
 all: Folders Pineapple cli
 	# Finished!
@@ -31,22 +29,20 @@ Folders:
 	mkdir -p $(BUILD)
 	mkdir -p $(BUILD_BIN)
 	mkdir -p $(BUILD_OBJ)
-	mkdir -p $(BUILD_INCLUDE)
 
 $(BUILD_OBJ)/%.o: $(SRC_RENDERER)/%.cpp
-	$(CC) -c -D BUILD_DLL $(INCLUDE) $< -o $@
+	$(CC) -c -I "$(INCLUDE)" $< -o $@
 
 Pineapple: $(SRC_RENDERER_OBJECTS)
 	# Compile shared library
-	#$(CC) -o "$(SRC_RENDERER_OBJECTS)" -c -D BUILD_DLL $(INCLUDE) "./src/Renderer/Pineapple.cpp"
-	$(CC) -o "$(BUILD_BIN)/Pineapple.dll" -shared $(SRC_RENDERER_OBJECTS)
-
-	# Copy include files
-	cp -r "$(SRC_INCLUDE)" "$(BUILD)/"
+	# $(CC) -o "$(BUILD_BIN)/Pineapple.dll" -shared $(SRC_RENDERER_OBJECTS)
+	
+	# Compile static library
+	ar rcs "$(BUILD_BIN)/libpineapple.a" $(SRC_RENDERER_OBJECTS)
 
 cli:
 	# Make cli
-	$(CC) -o "$(BUILD_BIN)/Pineapple-cli.exe" -I "$(BUILD_INCLUDE)" -L "$(BUILD_BIN)" "$(SRC_INTERFACE)/main-cli.cpp" -lPineapple
+	$(CC) -o "$(BUILD_BIN)/Pineapple-cli.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" "$(SRC_INTERFACE)/main-cli.cpp" $(LINK_CLI)
 
 gui:
-	#$(CC) -o "./build/bin/Pineapple-gui.exe" -I "./build/include" -L "./build/bin" "./src/Interface/main-gui.cpp" -lPineapple
+	$(CC) -o "$(BUILD_BIN)/Pineapple-gui.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" "$(SRC_INTERFACE)/main-gui.cpp" $(LINK_GUI)

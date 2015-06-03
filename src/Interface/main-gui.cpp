@@ -13,14 +13,15 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 int main(void) {
-
+    // Init GLFW
+    
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }
 
     glfwSetErrorCallback(error_callback);
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Test GUI", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Renderer", NULL, NULL);
 
     if (!window) {
         glfwTerminate();
@@ -31,8 +32,6 @@ int main(void) {
     glfwSwapInterval(1);
     glfwSetKeyCallback(window, key_callback);
 
-    float ratio;
-    int width, height;
     while (!glfwWindowShouldClose(window)) {
         glfwGetFramebufferSize(window, &width, &height);
         ratio = (float) width / (float) height;

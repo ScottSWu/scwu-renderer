@@ -1,11 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <Pineapple/Pineapple.h>
+#include <glm/glm.hpp>
+#include "Pineapple/Pineapple.hpp"
+#include "Pineapple/Camera.hpp"
 
 int main() {
-    Pineapple p;
+    Pineapple p = *(new Pineapple());
 
-    printf("Width: %d, Height: %d", p.getWidth(), p.getHeight());
+    Camera c = p.getCamera();
+    
+    printf("Width: %d, Height: %d", c.viewport.x, c.viewport.y);
 
     return 0;
 }
