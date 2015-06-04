@@ -7,7 +7,7 @@ Layout:
     lib - External libraries
     src - Source files
         Interface - Interface tools
-        Renderer - Actual renderer (Pineapple)
+        Renderer - Actual renderer
     build - Build files
         bin - Executables and libraries
         obj - Object file byproducts

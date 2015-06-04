@@ -1,8 +1,11 @@
-#include "Pineapple/Camera.hpp"
+#include "Placeholder/Camera.hpp"
 
-#ifndef _Pineapple_Renderer
-#define _Pineapple_Renderer
+#ifndef _Placeholder_Renderer
+#define _Placeholder_Renderer
 
+/**
+    Defines an arbitrary renderer.
+*/
 class Renderer {
     protected:
         Camera camera;
@@ -10,9 +13,10 @@ class Renderer {
         Renderer();
 
         virtual void render(float[]);
-        
+
         void setCameraViewport(int, int);
         void setCameraPosition(float, float, float);
+        void setCameraTarget(float, float, float);
 };
 
 #endif

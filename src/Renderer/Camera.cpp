@@ -1,18 +1,32 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Pineapple/Camera.hpp"
+#include "Placeholder/Camera.hpp"
 
+/**
+    Initialize a default camera.
+*/
 Camera::Camera() {
     initDefault();
 }
 
+/**
+    Initialize a camera with a given viewport size.
+
+    @param size     Viewport size
+*/
 Camera::Camera(glm::ivec2 size) {
     initDefault();
 
     viewport = size;
 }
 
+/**
+    Initialize a camera with a given viewport size and position.
+
+    @param size     Viewport size
+    @param pos      Camera position
+*/
 Camera::Camera(glm::ivec2 size, glm::vec3 pos) {
     initDefault();
 
@@ -20,18 +34,35 @@ Camera::Camera(glm::ivec2 size, glm::vec3 pos) {
     position = position;
 }
 
+/**
+    Initialize a camera with a given viewport size, position and target.
+
+    @param size     Viewport size
+    @param pos      Camera position
+    @param tar      Viewing target
+*/
+Camera::Camera(glm::ivec2 size, glm::vec3 pos, glm::vec3 tar) {
+    initDefault();
+
+    viewport = size;
+    position = position;
+    target = tar;
+}
+
 void Camera::initDefault() {
     fov = 45.f;
     viewport = glm::ivec2(640, 480);
     planes = glm::vec2(0.01f, 100.f);
 
-    position = glm::vec3(5.f, 3.f, 5.f);
-    target = glm::vec3(0.f, 0.f, 0.f);
+    position = glm::vec3(0.f, 0.f, 0.f);
+    target = glm::vec3(0.f, 0.f, 1.f);
     up = glm::vec3(0.f, 1.f, 0.f);
 }
 
 /**
     Compute the camera matrix to transform into camera space.
+
+    @return     4x4 camera transformation matrix
 */
 glm::mat4 Camera::computeCameraMatrix() {
     return glm::lookAt(position, target, up);
@@ -39,6 +70,8 @@ glm::mat4 Camera::computeCameraMatrix() {
 
 /**
     Compute the perspective matrix to transform into orthographic space.
+
+    @return     4x4 perspective matrix
 */
 glm::mat4 Camera::computePerspectiveMatrix() {
     float ratio = (float) viewport.x / (float) viewport.y;
@@ -47,6 +80,8 @@ glm::mat4 Camera::computePerspectiveMatrix() {
 
 /**
     Compute the viewport matrix to transform into screen space.
+
+    @return     4x4 viewport matrix
 */
 glm::mat4 Camera::computeViewportMatrix() {
     glm::mat4 vpm;

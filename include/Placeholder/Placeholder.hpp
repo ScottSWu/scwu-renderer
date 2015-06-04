@@ -2,19 +2,22 @@
 #include <string>
 #include <glm/glm.hpp>
 
-#include "Pineapple/Renderer.hpp"
-#include "Pineapple/Camera.hpp"
+#include "Placeholder/Renderer.hpp"
+#include "Placeholder/Camera.hpp"
 
-#ifndef _Pineapple
-#define _Pineapple
+#ifndef _Placeholder
+#define _Placeholder
 
 typedef std::map<std::string, std::string> StringMap;
 
-class Pineapple {
+/**
+    Defines the interface for all renderers.
+*/
+class Placeholder {
     protected:
         Renderer * renderer;
     public:
-        Pineapple();
+        Placeholder();
 
         Renderer * getRenderer();
         void render(float[]);

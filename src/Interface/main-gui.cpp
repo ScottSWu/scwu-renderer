@@ -4,13 +4,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <Windows.h>
 
-#include "Pineapple/Pineapple.hpp"
+#include "Placeholder/Placeholder.hpp"
 
 #define PI 3.141592653f
 
 bool keys[512];
-glm::vec3 cam = glm::vec3(PI/4.f, PI/6.f, 4.f);
+glm::vec3 cam = glm::vec3(PI/4.f, PI/6.f, 8.f);
 
 static void error_callback(int error, const char* message) {
     fputs(message, stderr);
@@ -20,7 +21,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
-    
+
     if (action == GLFW_PRESS) {
         keys[key] = true;
     }
@@ -36,21 +37,21 @@ static void handleKeys() {
     else if (keys[GLFW_KEY_DOWN]) {
         cam.y -= 0.04;
     }
-    
+
     if (keys[GLFW_KEY_LEFT]) {
         cam.x += 0.04;
     }
     else if (keys[GLFW_KEY_RIGHT]) {
         cam.x -= 0.04;
     }
-    
+
     if (cam.y>PI/2.f - 0.1f) {
         cam.y = PI/2.f - 0.1f;
     }
     else if (cam.y<-PI/2.f + 0.1f) {
         cam.y = -PI/2.f + 0.1f;
     }
-    
+
     cam.x = (float) fmod(cam.x, 2.f * PI);
 }
 
@@ -75,15 +76,19 @@ int main(void) {
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
     glfwSetKeyCallback(window, key_callback);
-    
+
     if (glewInit() != GLEW_OK) {
         printf("glew failed to initialize.");
         exit(EXIT_FAILURE);
     }
-    
-    Pineapple p;
+
+    // Renderer variables
+    Placeholder p;
+    Renderer * r = p.getRenderer();
     int width, height, newWidth, newHeight;
     float dummy[1];
+
+    // Timing variables
     double targetRate = 1.0 / 60.0;
     double lastTime = glfwGetTime();
     double currTime = lastTime;
@@ -91,22 +96,24 @@ int main(void) {
     long lastFrameCount = 0;
     double lastFrame = currTime;
     long frameCounter = 0;
-    
+
     while (!glfwWindowShouldClose(window)) {
         glfwGetFramebufferSize(window, &newWidth, &newHeight);
 
         // Monitor for change in window size
         if (newWidth!=width || newHeight!=height) {
-            p.getRenderer()->setCameraViewport(newWidth, newHeight);
+            r->setCameraViewport(newWidth, newHeight);
             width = newWidth;
             height = newHeight;
         }
-        
-        // Set camera orientation
+
+        // Set and update camera orientation
         float x = (float) (cam.z * cos(cam.y) * cos(cam.x));
         float y = (float) (cam.z * sin(cam.y));
         float z = (float) (cam.z * cos(cam.y) * sin(cam.x));
-        p.getRenderer()->setCameraPosition(x, y, z);
+        r->setCameraPosition(x, y, z);
+        r->setCameraTarget(0.f, 0.f, 0.f);
+
 
         // Main rendering
         p.render(dummy);
@@ -114,24 +121,23 @@ int main(void) {
         // Vsync or something?
         glfwSwapBuffers(window);
         glfwPollEvents();
-        
+
         // Some timing stuff
         currTime = glfwGetTime();
         duration = currTime - lastTime;
         if (duration < targetRate) {
-            
+            Sleep((int) ((targetRate - duration) * 1000));
+            lastTime = currTime;
         }
-        
+
         if (currTime - lastFrame > 1.0) {
             printf("Frames per second: %d\n", frameCounter - lastFrameCount);
             lastFrameCount = frameCounter;
             lastFrame = currTime;
-            
-            printf("Camera: %f %f %f\n", x, y, z);
         }
-        
+
         frameCounter++;
-        
+
         // Handle keys
         handleKeys();
     }
