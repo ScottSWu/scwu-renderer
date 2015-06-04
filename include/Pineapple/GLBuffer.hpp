@@ -11,6 +11,7 @@ class GLBuffer {
     public:
         GLBuffer(const Mesh &);
 
+        GLenum mode;
         GLsizei indexSize;
         GLuint indexBuffer;
         GLuint positionBuffer, normalBuffer;

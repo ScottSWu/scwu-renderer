@@ -13,7 +13,7 @@ Camera::Camera(glm::ivec2 size) {
     viewport = size;
 }
 
-Camera::Camera(glm::ivec2 size, glm::ivec3 pos) {
+Camera::Camera(glm::ivec2 size, glm::vec3 pos) {
     initDefault();
 
     viewport = size;

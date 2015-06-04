@@ -11,7 +11,8 @@ class Renderer {
 
         virtual void render(float[]);
         
-        void setViewport(int, int);
+        void setCameraViewport(int, int);
+        void setCameraPosition(float, float, float);
 };
 
 #endif

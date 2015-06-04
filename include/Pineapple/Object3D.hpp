@@ -10,11 +10,11 @@ class Object3D {
         Object3D();
 
         bool visible;
+        bool updated;
+        bool wireframe;
         glm::mat4 transform;
         glm::mat4 transformTInv;
         std::vector<Object3D> children;
-
-        virtual BoundingBox getBoundingBox();
 };
 
 #endif

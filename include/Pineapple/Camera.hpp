@@ -9,7 +9,7 @@ class Camera {
     public:
         Camera();
         Camera(glm::ivec2);
-        Camera(glm::ivec2, glm::ivec3);
+        Camera(glm::ivec2, glm::vec3);
 
         float fov;
         glm::ivec2 viewport;

@@ -1,7 +1,8 @@
 #include <GLFW/glfw3.h>
+#include <stdio.h>
 
 #include "Pineapple/Pineapple.hpp"
-#include "Pineapple/OpenGLRenderer.hpp"
+#include "Pineapple/GLRenderer.hpp"
 
 Pineapple::Pineapple() {
     renderer = new GLRenderer();
