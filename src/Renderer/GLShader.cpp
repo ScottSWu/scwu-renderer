@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 
-#include "Placeholder/GLShader.hpp"
+#include "Pineapple/GLShader.hpp"
 
 /**
     Initialize a new shader.

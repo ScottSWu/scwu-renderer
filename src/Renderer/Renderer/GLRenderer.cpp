@@ -3,14 +3,14 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 
-#include "Placeholder/Renderer.hpp"
-#include "Placeholder/GLRenderer.hpp"
-#include "Placeholder/Object3D.hpp"
-#include "Placeholder/Mesh.hpp"
-#include "Placeholder/GLShader.hpp"
+#include "Pineapple/Renderer.hpp"
+#include "Pineapple/GLRenderer.hpp"
+#include "Pineapple/Object3D.hpp"
+#include "Pineapple/Mesh.hpp"
+#include "Pineapple/GLShader.hpp"
 
 GLRenderer::GLRenderer() : Renderer() {
-
+    
 }
 
 /**

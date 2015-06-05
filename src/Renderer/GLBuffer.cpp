@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-#include "Placeholder/GLBuffer.hpp"
+#include "Pineapple/GLBuffer.hpp"
 
 /**
     Create vertex arrays and buffer given a mesh. Must be done within a gl context.

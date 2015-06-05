@@ -6,7 +6,7 @@
 #include <math.h>
 #include <Windows.h>
 
-#include "Placeholder/Placeholder.hpp"
+#include "Pineapple/Pineapple.hpp"
 
 #define PI 3.141592653f
 
@@ -30,19 +30,20 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
 }
 
-static void handleKeys() {
+static void handleKeys(double duration) {
+    float rate = (float) (duration * 0.04 * 60);
     if (keys[GLFW_KEY_UP]) {
-        cam.y += 0.04;
+        cam.y += rate;
     }
     else if (keys[GLFW_KEY_DOWN]) {
-        cam.y -= 0.04;
+        cam.y -= rate;
     }
 
     if (keys[GLFW_KEY_LEFT]) {
-        cam.x += 0.04;
+        cam.x += rate;
     }
     else if (keys[GLFW_KEY_RIGHT]) {
-        cam.x -= 0.04;
+        cam.x -= rate;
     }
 
     if (cam.y>PI/2.f - 0.1f) {
@@ -65,7 +66,7 @@ int main(void) {
 
     glfwSetErrorCallback(error_callback);
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Renderer", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(640, 480, "Pineapple Renderer", NULL, NULL);
 
     if (!window) {
         printf("glfw window failed to initialize.");
@@ -83,7 +84,7 @@ int main(void) {
     }
 
     // Renderer variables
-    Placeholder p;
+    Pineapple p;
     Renderer * r = p.getRenderer();
     int width, height, newWidth, newHeight;
     float dummy[1];
@@ -116,7 +117,7 @@ int main(void) {
 
 
         // Main rendering
-        p.render(dummy);
+        p.visualize();
 
         // Vsync or something?
         glfwSwapBuffers(window);
@@ -139,7 +140,7 @@ int main(void) {
         frameCounter++;
 
         // Handle keys
-        handleKeys();
+        handleKeys(duration);
     }
 
     glfwDestroyWindow(window);

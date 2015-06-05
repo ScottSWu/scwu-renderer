@@ -18,10 +18,10 @@ SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:
 
 # Specific links
 LINK_RENDERER=-lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32
-LINK_CLI=-lPlaceholder
-LINK_GUI=-lPlaceholder -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32
+LINK_CLI=-lPineapple
+LINK_GUI=-lPineapple -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32
 
-all: Folders Resources Placeholder Libraries cli gui
+all: Folders Resources Pineapple Libraries cli gui
 	# Finished!
 
 new: clean all
@@ -39,12 +39,12 @@ Resources:
 $(BUILD_OBJ)/%.o: $(SRC_RENDERER)/%.cpp
 	$(CC) -c -I "$(INCLUDE)" $< -o $@ $(LINK_RENDERER)
 
-Placeholder: $(SRC_RENDERER_OBJECTS)
+	Pineapple: $(SRC_RENDERER_OBJECTS)
 	# Compile shared library
-	# $(CC) -o "$(BUILD_BIN)/Placeholder.dll" -shared $(SRC_RENDERER_OBJECTS)
+	# $(CC) -o "$(BUILD_BIN)/Pineapple.dll" -shared $(SRC_RENDERER_OBJECTS)
 
 	# Compile static library
-	ar rcs "$(BUILD_BIN)/libPlaceholder.a" $(SRC_RENDERER_OBJECTS)
+	ar rcs "$(BUILD_BIN)/libPineapple.a" $(SRC_RENDERER_OBJECTS)
 
 Libraries:
 	# Copy dynamic Libraries

@@ -1,7 +1,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Placeholder/Camera.hpp"
+#include "Pineapple/Camera.hpp"
 
 /**
     Initialize a default camera.

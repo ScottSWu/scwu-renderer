@@ -1,9 +1,9 @@
 #include <GLFW/glfw3.h>
 
-#include "Placeholder/Mesh.hpp"
+#include "Pineapple/Mesh.hpp"
 
-#ifndef _Placeholder_Object_GLBuffer
-#define _Placeholder_Object_GLBuffer
+#ifndef _Pineapple_Object_GLBuffer
+#define _Pineapple_Object_GLBuffer
 
 /**
     Defines vertex arrays and buffers for a mesh.

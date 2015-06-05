@@ -1,6 +1,6 @@
 #include <glm/glm.hpp>
 
-#include "Placeholder/BoundingBox.hpp"
+#include "Pineapple/BoundingBox.hpp"
 
 /**
     Create a new bounding box determined by the lower and upper corners and compute the center.

@@ -1,8 +1,8 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-#ifndef _Placeholder_Object_GLShader
-#define _Placeholder_Object_GLShader
+#ifndef _Pineapple_Object_GLShader
+#define _Pineapple_Object_GLShader
 
 /**
     Defines shader programs and their uniforms.

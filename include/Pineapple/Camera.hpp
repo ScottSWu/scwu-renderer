@@ -1,10 +1,10 @@
 #include <glm/glm.hpp>
 
-#ifndef _Placeholder_Camera
-#define _Placeholder_Camera
+#ifndef _Pineapple_Camera
+#define _Pineapple_Camera
 
 /**
-    Defines a perspective camera.
+    Defines a camera.
 */
 class Camera {
     private:
