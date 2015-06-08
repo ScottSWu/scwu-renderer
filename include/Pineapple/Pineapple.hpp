@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "Pineapple/Renderer/Renderer.hpp"
+#include "Pineapple/Renderer.hpp"
 #include "Pineapple/Camera.hpp"
 
 #ifndef _Pineapple
@@ -12,8 +12,8 @@
 typedef std::map<std::string, std::string> StringMap;
 
 /**
-    Defines the interface for all renderers.
-*/
+ Defines the interface for all renderers.
+ */
 class Pineapple {
     protected:
         /** Offline renderer */
@@ -29,62 +29,75 @@ class Pineapple {
         std::vector<Light> lights;
     public:
         /**
-            Initialize a renderer and visualizer.
-        */
+         * Initialize a renderer and visualizer.
+         */
         Pineapple();
 
         /**
-            Return the current renderer.
-        */
+         * Return the current renderer.
+         */
         Renderer * getRenderer();
 
         /**
-            Render an image to an array.
-
-            @param imageBuffer  Array to render to
-        */
+         * Render an image to an array.
+         *
+         * @param imageBuffer  Array to render to
+         */
         void render(float[]);
         /**
-            Visualize the scene in the current OpenGL context
-        */
+         * Visualize the scene in the current OpenGL context
+         */
         void visualize();
 
         /**
-            Set the camera viewport size.
-
-            @param width    Viewport width
-            @param height   Viewport height
-        */
+         * Set the camera viewport size.
+         *
+         * @param width    Viewport width
+         * @param height   Viewport height
+         */
         void setCameraViewport(int, int);
         /**
-            Set the camera position.
-
-            @param x    x coordinate
-            @param y    y coordinate
-            @param z    z coordinate
-        */
+         * Set the camera position.
+         *
+         * @param x    x coordinate
+         * @param y    y coordinate
+         * @param z    z coordinate
+         */
         void setCameraPosition(float, float, float);
         /**
-            Set the camera viewing target.
-
-            @param x    x coordinate
-            @param y    y coordinate
-            @param z    z coordinate
-        */
+         * Set the camera viewing target.
+         *
+         * @param x    x coordinate
+         * @param y    y coordinate
+         * @param z    z coordinate
+         */
         void setCameraTarget(float, float, float);
 
         /**
-            Add an object to the scene.
-
-            @param object   The object to add
-        */
+         * Add an object to the scene.
+         *
+         * @param object   The object to add
+         */
         void addObject(Object3d);
         /**
-            Remove an object from the scene.
-
-            @param object   The object to remove
-        */
+         * Remove an object from the scene.
+         *
+         * @param object   The object to remove
+         */
         void removeObject(Object3d);
+
+        /**
+         * Add a light to the scene.
+         *
+         * @param light    The light to add
+         */
+        void addLight(Light);
+        /**
+         * Remove a light from the scene.
+         *
+         * @param light    The light to remove
+         */
+        void removeLight(Light);
 };
 
 #endif

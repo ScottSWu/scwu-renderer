@@ -1,13 +1,13 @@
 #include <GLFW/glfw3.h>
 
-#include "Pineapple/Mesh.hpp"
+#include "Pineapple/Shape/Mesh.hpp"
 
 #ifndef _Pineapple_Object_GLBuffer
 #define _Pineapple_Object_GLBuffer
 
 /**
-    Defines vertex arrays and buffers for a mesh.
-*/
+ Defines vertex arrays and buffers for a mesh.
+ */
 class GLBuffer {
     protected:
         Mesh parent;

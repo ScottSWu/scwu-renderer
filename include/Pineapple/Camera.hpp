@@ -4,23 +4,17 @@
 #define _Pineapple_Camera
 
 /**
-    Defines a camera.
-*/
+ * Defines a camera.
+ */
 class Camera {
-    private:
-        void initDefault();
     public:
+        /**
+         * Initialize a default camera.
+         */
         Camera();
-        Camera(glm::ivec2);
-        Camera(glm::ivec2, glm::vec3);
-        Camera(glm::ivec2, glm::vec3, glm::vec3);
 
-        // Camera field of view
-        float fov;
         // Positive viewport width and height
         glm::ivec2 viewport;
-        // Near and far planes
-        glm::vec2 planes;
 
         // Camera position
         glm::vec3 position;
@@ -28,12 +22,19 @@ class Camera {
         glm::vec3 target;
         // Camera up orientation
         glm::vec3 up;
-        // Camera orientation TODO combine into target instead
-        glm::vec3 orientation;
 
+        /**
+         * Compute the camera matrix to transform into camera space.
+         *
+         * @return     4x4 camera transformation matrix
+         */
         glm::mat4 computeCameraMatrix();
-        glm::mat4 computePerspectiveMatrix();
-        glm::mat4 computeViewportMatrix();
+        /**
+         * Compute the perspective matrix to transform into orthographic space.
+         *
+         * @return     4x4 perspective matrix
+         */
+        virtual glm::mat4 computePerspectiveMatrix();
 };
 
 #endif

@@ -4,8 +4,8 @@
 #define _Pineapple_Object_BoundingBox
 
 /**
-    Defines an axis aligned bounding box.
-*/
+ Defines an axis aligned bounding box.
+ */
 class BoundingBox {
     public:
         BoundingBox(glm::vec3, glm::vec3);

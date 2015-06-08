@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <algorithm>
 
-#include "Pineapple/Renderer/Renderer.hpp"
+#include "Pineapple/Renderer.hpp"
 #include "Pineapple/Renderer/GLRenderer.hpp"
 #include "Pineapple/Pineapple.hpp"
 
@@ -15,7 +15,12 @@ Renderer * Pineapple::getRenderer() {
 }
 
 void Pineapple::render(float imageBuffer[]) {
-    renderer->render(imageBuffer);
+    renderer->render(imageBuffer, scene, camera, lights);
+}
+
+void Pineapple::visualize() {
+    float dummy[1];
+    visualizer->render(dummy, scene, camera, lights);
 }
 
 void Pineapple::setCameraViewport(int width, int height) {
@@ -31,12 +36,17 @@ void Pineapple::setCameraTarget(float x, float y, float z) {
 }
 
 void Pineapple::addObject(Object3d object) {
-    scene.push_back(object);
+    scene.addChild (object);
 }
 
 void Pineapple::removeObject(Object3d object) {
-    scene.erase(
-        std::remove(scene.begin(), scene.end(), object),
-        scene.end()
-    );
+    scene.removeChild(object);
+}
+
+void Pineapple::addLight(Light light) {
+    lights.push_back(light);
+}
+
+void Pineapple::removeLight(Light light) {
+    lights.erase(std::remove(lights.begin(), lights.end(), light), lights.end());
 }

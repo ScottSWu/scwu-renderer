@@ -11,7 +11,7 @@ INCLUDE=./include
 BUILD_BIN=$(BUILD)/bin
 BUILD_OBJ=$(BUILD)/obj
 SRC_INTERFACE=$(SRC)/Interface
-SRC_RENDERER=$(SRC)/Renderer
+SRC_RENDERER=$(SRC)/Pineapple
 
 SRC_RENDERER_SOURCES=$(wildcard $(SRC_RENDERER)/*.cpp)
 SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:.cpp=.o)))
@@ -39,7 +39,7 @@ Resources:
 $(BUILD_OBJ)/%.o: $(SRC_RENDERER)/%.cpp
 	$(CC) -c -I "$(INCLUDE)" $< -o $@ $(LINK_RENDERER)
 
-	Pineapple: $(SRC_RENDERER_OBJECTS)
+Pineapple: $(SRC_RENDERER_OBJECTS)
 	# Compile shared library
 	# $(CC) -o "$(BUILD_BIN)/Pineapple.dll" -shared $(SRC_RENDERER_OBJECTS)
 

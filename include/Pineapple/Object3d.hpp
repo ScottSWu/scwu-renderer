@@ -1,11 +1,12 @@
+#include <glm/glm.hpp>
 #include <vector>
 
 #ifndef _Pineapple_Object3d
 #define _Pineapple_Object3d
 
 /**
-    Defines an object in the scene.
-*/
+ * Defines an object in the scene.
+ */
 class Object3d {
     protected:
         /** List of children */
@@ -14,8 +15,8 @@ class Object3d {
         std::vector<int> rendererIndex;
     public:
         /**
-            Initialize a new object.
-        */
+         Initialize a new object.
+         */
         Object3d();
 
         /** Whether or not the object is visible */
@@ -32,16 +33,16 @@ class Object3d {
         glm::mat4 worldTransformIT;
 
         /**
-            Add a child object.
+         Add a child object.
 
-            @param object   Object to add
-        */
+         @param object   Object to add
+         */
         void addChild(Object3d);
         /**
-            Remove a child object.
+         Remove a child object.
 
-            @param object   Object to remove
-        */
+         @param object   Object to remove
+         */
         void removeChild(Object3d);
 };
 

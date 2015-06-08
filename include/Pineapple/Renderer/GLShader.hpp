@@ -5,8 +5,8 @@
 #define _Pineapple_Object_GLShader
 
 /**
-    Defines shader programs and their uniforms.
-*/
+ Defines shader programs and their uniforms.
+ */
 class GLShader {
     protected:
         // Shader program locations
