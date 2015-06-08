@@ -1,7 +1,7 @@
-#include <glm/glm.hpp>
-
 #ifndef _Pineapple_Object_BoundingBox
 #define _Pineapple_Object_BoundingBox
+
+#include <glm/glm.hpp>
 
 /**
  Defines an axis aligned bounding box.

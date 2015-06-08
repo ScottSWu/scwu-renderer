@@ -1,20 +1,18 @@
+#ifndef _Pineapple_Renderer
+#define _Pineapple_Renderer
+
 #include <vector>
 
 #include "Pineapple/Camera.hpp"
-
-#ifndef _Pineapple_Renderer
-#define _Pineapple_Renderer
+#include "Pineapple/Light.hpp"
+#include "Pineapple/Object3d.hpp"
+#include "Pineapple/Scene.hpp"
 
 /**
  * Defines an arbitrary renderer.
  */
 class Renderer {
     protected:
-        /**
-         * Count of registered renderers
-         */
-        static int RENDERER_COUNT;
-
         /**
          * This renderer's id
          */
@@ -25,6 +23,11 @@ class Renderer {
         void registerRenderer();
     public:
         /**
+         * Count of registered renderers
+         */
+        static int RENDERER_COUNT;
+
+        /**
          * Initialize a new renderer.
          */
         Renderer();
@@ -34,11 +37,9 @@ class Renderer {
          * The size of the given array must be greater than 4 * width * height.
          *
          * @param imageBuffer  Float array to render to
-         * @param scene        Scene root
-         * @param camera       The scene camera
-         * @param lights       List of scene lights
+         * @param scene        Scene to render
          */
-        virtual void render(float[], Object3d, Camera, std::vector<Light>);
+        virtual void render(float[], Scene *);
 };
 
 #endif

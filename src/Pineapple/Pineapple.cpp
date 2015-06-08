@@ -2,51 +2,29 @@
 #include <stdio.h>
 #include <algorithm>
 
-#include "Pineapple/Renderer.hpp"
-#include "Pineapple/Renderer/GLRenderer.hpp"
+#include "Pineapple/Light.hpp"
+#include "Pineapple/Object3d.hpp"
 #include "Pineapple/Pineapple.hpp"
 
 Pineapple::Pineapple() {
+    renderer = new Renderer();
     visualizer = new GLRenderer();
+    scene = new Scene();
 }
 
 Renderer * Pineapple::getRenderer() {
     return renderer;
 }
 
+Scene * Pineapple::getScene() {
+    return scene;
+}
+
 void Pineapple::render(float imageBuffer[]) {
-    renderer->render(imageBuffer, scene, camera, lights);
+    renderer->render(imageBuffer, scene);
 }
 
 void Pineapple::visualize() {
     float dummy[1];
-    visualizer->render(dummy, scene, camera, lights);
-}
-
-void Pineapple::setCameraViewport(int width, int height) {
-    camera.viewport = glm::ivec2(width, height);
-}
-
-void Pineapple::setCameraPosition(float x, float y, float z) {
-    camera.position = glm::vec3(x, y, z);
-}
-
-void Pineapple::setCameraTarget(float x, float y, float z) {
-    camera.target = glm::vec3(x, y, z);
-}
-
-void Pineapple::addObject(Object3d object) {
-    scene.addChild (object);
-}
-
-void Pineapple::removeObject(Object3d object) {
-    scene.removeChild(object);
-}
-
-void Pineapple::addLight(Light light) {
-    lights.push_back(light);
-}
-
-void Pineapple::removeLight(Light light) {
-    lights.erase(std::remove(lights.begin(), lights.end(), light), lights.end());
+    visualizer->render(dummy, scene);
 }

@@ -1,9 +1,14 @@
+#include <vector>
+
+#include "Pineapple/Camera.hpp"
+#include "Pineapple/Light.hpp"
+#include "Pineapple/Object3d.hpp"
 #include "Pineapple/Renderer.hpp"
 
 int Renderer::RENDERER_COUNT = 0;
-int Renderer::rendererId = -1;
 
 Renderer::Renderer() {
+    rendererId = -1;
     registerRenderer();
 }
 
@@ -11,6 +16,6 @@ void Renderer::registerRenderer() {
     rendererId = RENDERER_COUNT++;
 }
 
-void Renderer::render(float imageBuffer[], Object3d scene, Camera camera, std::vector<Light> lights) {
-
+void Renderer::render(float imageBuffer[], Scene * scene) {
+    
 }

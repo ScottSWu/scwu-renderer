@@ -1,17 +1,17 @@
-#include <glm/glm.hpp>
-
 #ifndef _Pineapple_Light
 #define _Pineapple_Light
 
-class Light: Object3d {
+#include <glm/glm.hpp>
+
+#include "Pineapple/Object3d.hpp"
+
+class Light {
     public:
-        /** Ambient lighting */
-        glm::vec4 ambient;
-        /** Diffuse lighting */
-        glm::vec4 diffuse;
-        /** Specular lighting */
-        glm::vec4 specular;
-        /** Specular intensity */
+        /** Position */
+        glm::vec3 position;
+        /** Light color */
+        glm::vec4 color;
+        /** Intensity */
         float intensity;
         /** Light direction */
         glm::vec4 direction;

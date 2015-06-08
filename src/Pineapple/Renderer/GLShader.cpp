@@ -6,22 +6,15 @@
 #include <string>
 #include <fstream>
 
-#include "Pineapple/GLShader.hpp"
+#include "Pineapple/Renderer/GLShader.hpp"
 
-/**
- Initialize a new shader.
- */
 GLShader::GLShader() {
-    
+    programId = 0;
+    vertexId = 0;
+    fragmentId = 0;
 }
 
-/**
- Load and compile the vertex and fragment shaders into a new shader program.
-
- @param vertFile     Path to vertex shader code
- @param fragFile     Path to fragment shader code
- */
-void GLShader::load(std::string vertFile, std::string fragFile) {
+void GLShader::load(std::string vertexFile, std::string fragmentFile) {
     vertexId = glCreateShader(GL_VERTEX_SHADER);
     fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
     
@@ -31,7 +24,7 @@ void GLShader::load(std::string vertFile, std::string fragFile) {
     std::ifstream fin;
     std::stringstream buffer;
     
-    fin.open(vertFile.c_str());
+    fin.open(vertexFile.c_str());
     if (fin.is_open()) {
         buffer << fin.rdbuf();
         vertexCode = buffer.str();
@@ -45,7 +38,7 @@ void GLShader::load(std::string vertFile, std::string fragFile) {
     
     buffer.str(std::string());
     
-    fin.open(fragFile.c_str());
+    fin.open(fragmentFile.c_str());
     if (fin.is_open()) {
         buffer << fin.rdbuf();
         fragmentCode = buffer.str();
@@ -104,24 +97,16 @@ void GLShader::load(std::string vertFile, std::string fragFile) {
     
     glDeleteShader(vertexId);
     glDeleteShader(fragmentId);
-    
-    // Get uniform Locations
-    glUseProgram(programId);
-    mViewProjectionId = glGetUniformLocation(programId, "mViewProjection");
-    mTransformId = glGetUniformLocation(programId, "mTransform");
-    mTransformITId = glGetUniformLocation(programId, "mTransformIT");
 }
 
-/**
- Bind the shader program to the current context.
- */
 void GLShader::bind() {
     glUseProgram(programId);
 }
 
-/**
- Unbind the shader program from the current context.
- */
 void GLShader::unbind() {
     glUseProgram(-1);
+}
+
+GLint GLShader::getUniformLocation(std::string name) {
+    return glGetUniformLocation(programId, name);
 }

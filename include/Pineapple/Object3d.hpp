@@ -1,8 +1,8 @@
-#include <glm/glm.hpp>
-#include <vector>
-
 #ifndef _Pineapple_Object3d
 #define _Pineapple_Object3d
+
+#include <glm/glm.hpp>
+#include <vector>
 
 /**
  * Defines an object in the scene.
@@ -13,9 +13,14 @@ class Object3d {
         std::vector<Object3d> children;
         /** Indexed locations for multiple renderers */
         std::vector<int> rendererIndex;
+
+        /** Computed complete transformation matrix */
+        glm::mat4 worldTransform;
+        /** Inverse transpose of the complete transformation matrix */
+        glm::mat4 worldTransformIT;
     public:
         /**
-         Initialize a new object.
+         * Initialize a new object.
          */
         Object3d();
 
@@ -27,23 +32,26 @@ class Object3d {
         bool wireframe;
         /** Local transformation matrix */
         glm::mat4 transform;
-        /** Computed complete transformation matrix */
-        glm::mat4 worldTransform;
-        /** Inverse transpose of the complete transformation matrix */
-        glm::mat4 worldTransformIT;
 
         /**
-         Add a child object.
-
-         @param object   Object to add
+         * Recursively compute the world transform.
+         *
+         * @param parentTransform   Transformation matrix of the parent object
          */
-        void addChild(Object3d);
+        void computeTransform(glm::mat4);
+
         /**
-         Remove a child object.
-
-         @param object   Object to remove
+         * Add a child object.
+         *
+         * @param object   Object to add
          */
-        void removeChild(Object3d);
+        void addChild(const Object3d &);
+        /**
+         * Remove a child object.
+         *
+         * @param object   Object to remove
+         */
+        void removeChild(const Object3d &);
 };
 
 #endif

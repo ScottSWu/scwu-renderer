@@ -1,7 +1,7 @@
-#include <glm/glm.hpp>
-
 #ifndef _Pineapple_Shape_Vertex
 #define _Pineapple_Shape_Vertex
+
+#include <glm/glm.hpp>
 
 class Vertex {
     public:

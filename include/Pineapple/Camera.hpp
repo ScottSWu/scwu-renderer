@@ -1,7 +1,7 @@
-#include <glm/glm.hpp>
-
 #ifndef _Pineapple_Camera
 #define _Pineapple_Camera
+
+#include <glm/glm.hpp>
 
 /**
  * Defines a camera.
@@ -13,8 +13,10 @@ class Camera {
          */
         Camera();
 
-        // Positive viewport width and height
+        /** Positive viewport width and height */
         glm::ivec2 viewport;
+        /** Near and far planes */
+        glm::vec2 planes;
 
         // Camera position
         glm::vec3 position;
@@ -30,11 +32,40 @@ class Camera {
          */
         glm::mat4 computeCameraMatrix();
         /**
-         * Compute the perspective matrix to transform into orthographic space.
+         * Compute the projection matrix to transform into normalized space.
          *
-         * @return     4x4 perspective matrix
+         * @return     4x4 projection matrix
          */
-        virtual glm::mat4 computePerspectiveMatrix();
+        virtual glm::mat4 computeProjectionMatrix();
+
+        /**
+         * Translate (pan) the camera by the specified mouse movement.
+         *
+         * @param mx    Mouse x movement
+         * @param my    Mouse y movement
+         */
+        void translate(float, float);
+        /**
+         * Rotate (orbit) the camera around its target by the specified mouse movement.
+         *
+         * @param mx    Mouse x movement
+         * @param my    Mouse y movement
+         */
+        void rotate(float, float);
+        /**
+         * Zoom the camera by the specified mouse movement.
+         *
+         * @param mx    Mouse x movement
+         * @param my    Mouse y movement
+         */
+        void zoom(float, float);
+        /**
+         * Tilt the camera by the specified mouse movement.
+         *
+         * @param mx    Mouse x movement
+         * @param my    Mouse y movement
+         */
+        void tilt(float, float);
 };
 
 #endif

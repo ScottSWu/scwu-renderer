@@ -1,29 +1,36 @@
+#ifndef _Pineapple_Shape_Triangle
+#define _Pineapple_Shape_Triangle
+
 #include <glm/glm.hpp>
 
 #include "Pineapple/Shape/Vertex.hpp"
+#include "Pineapple/Shape/Mesh.hpp"
 
-#ifndef _Pineapple_Shape_Triangle
-#define _Pineapple_Shape_Triangle
+class Mesh;
 
 class Triangle {
     public:
         /**
          * Initialize a new triangle with three vertices.
          *
-         * @param v0    The first vertex
-         * @param v1    The second vertex
-         * @param v2    The third vertex
+         * @param parent    The parent mesh
+         * @param v0        The first vertex
+         * @param v1        The second vertex
+         * @param v2        The third vertex
          */
-        Triangle(Vertex v0, Vertex v1, Vertex v2);
+        Triangle(Mesh *, unsigned int, unsigned int, unsigned int);
+
+        /** Parent mesh containing this triangle */
+        Mesh * parent;
 
         /** The first vertex in the triangle */
-        Vertex vertex0;
+        unsigned int vertex0;
         /** The second vertex in the triangle */
-        Vertex vertex1;
-        /** The third vertex in the triangle *
-        Vertex vertex2;
+        unsigned int vertex1;
+        /** The third vertex in the triangle */
+        unsigned int vertex2;
 
-        /** Triangle normal */
+         /** Triangle normal */
         glm::vec3 normal;
 
         /**
@@ -31,6 +38,13 @@ class Triangle {
          * n = normalize((v0 - v1) x (v2 - v1))
          */
         void computeNormal();
+
+        /**
+         * Return corresponding indices for each vertex.
+         *
+         * @return  Integer vector of indices
+         */
+        glm::uvec3 getIndices();
 };
 
 #endif

@@ -1,18 +1,18 @@
+#ifndef _Pineapple
+#define _Pineapple
+
 #include <glm/glm.hpp>
 #include <map>
 #include <string>
 #include <vector>
 
+#include "Pineapple/Scene.hpp"
 #include "Pineapple/Renderer.hpp"
+#include "Pineapple/Renderer/GLRenderer.hpp"
 #include "Pineapple/Camera.hpp"
 
-#ifndef _Pineapple
-#define _Pineapple
-
-typedef std::map<std::string, std::string> StringMap;
-
 /**
- Defines the interface for all renderers.
+ * Defines the interface for all renderers.
  */
 class Pineapple {
     protected:
@@ -21,12 +21,8 @@ class Pineapple {
         /** OpenGL visualizer */
         Renderer * visualizer;
 
-        /** Camera */
-        Camera camera;
-        /** Scene root */
-        Object3d scene;
-        /** List of lights */
-        std::vector<Light> lights;
+        /** Scene */
+        Scene * scene;
     public:
         /**
          * Initialize a renderer and visualizer.
@@ -35,8 +31,16 @@ class Pineapple {
 
         /**
          * Return the current renderer.
+         *
+         * @return  A pointer to the current renderer
          */
         Renderer * getRenderer();
+        /**
+         * Return the current scene.
+         *
+         * @return  A pointer to the current scene
+         */
+        Scene * getScene();
 
         /**
          * Render an image to an array.
@@ -48,56 +52,6 @@ class Pineapple {
          * Visualize the scene in the current OpenGL context
          */
         void visualize();
-
-        /**
-         * Set the camera viewport size.
-         *
-         * @param width    Viewport width
-         * @param height   Viewport height
-         */
-        void setCameraViewport(int, int);
-        /**
-         * Set the camera position.
-         *
-         * @param x    x coordinate
-         * @param y    y coordinate
-         * @param z    z coordinate
-         */
-        void setCameraPosition(float, float, float);
-        /**
-         * Set the camera viewing target.
-         *
-         * @param x    x coordinate
-         * @param y    y coordinate
-         * @param z    z coordinate
-         */
-        void setCameraTarget(float, float, float);
-
-        /**
-         * Add an object to the scene.
-         *
-         * @param object   The object to add
-         */
-        void addObject(Object3d);
-        /**
-         * Remove an object from the scene.
-         *
-         * @param object   The object to remove
-         */
-        void removeObject(Object3d);
-
-        /**
-         * Add a light to the scene.
-         *
-         * @param light    The light to add
-         */
-        void addLight(Light);
-        /**
-         * Remove a light from the scene.
-         *
-         * @param light    The light to remove
-         */
-        void removeLight(Light);
 };
 
 #endif

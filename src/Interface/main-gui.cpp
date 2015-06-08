@@ -85,7 +85,7 @@ int main(void) {
     
     // Renderer variables
     Pineapple p;
-    Renderer * r = p.getRenderer();
+    Scene * s = p.getScene();
     int width, height, newWidth, newHeight;
     float dummy[1];
     
@@ -103,7 +103,7 @@ int main(void) {
         
         // Monitor for change in window size
         if (newWidth != width || newHeight != height) {
-            r->setCameraViewport(newWidth, newHeight);
+            s->setCameraViewport(newWidth, newHeight);
             width = newWidth;
             height = newHeight;
         }
@@ -112,8 +112,8 @@ int main(void) {
         float x = (float) (cam.z * cos(cam.y) * cos(cam.x));
         float y = (float) (cam.z * sin(cam.y));
         float z = (float) (cam.z * cos(cam.y) * sin(cam.x));
-        r->setCameraPosition(x, y, z);
-        r->setCameraTarget(0.f, 0.f, 0.f);
+        s->setCameraPosition(x, y, z);
+        s->setCameraTarget(0.f, 0.f, 0.f);
         
         // Main rendering
         p.visualize();
