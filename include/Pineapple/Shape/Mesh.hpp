@@ -9,12 +9,17 @@
 #include "Pineapple/Shape/Triangle.hpp"
 #include "Pineapple/Object3d.hpp"
 
+class Triangle;
+
 /**
  Defines a triangle mesh.
  */
 class Mesh: public Surface {
     public:
-        Mesh(const Material &);
+        /**
+         * Initialize a mesh with a given material.
+         */
+        Mesh(Material * inMaterial = new Material());
 
         /** List of vertices */
         std::vector<Vertex> vertices;

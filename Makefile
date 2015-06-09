@@ -1,3 +1,8 @@
+define \n
+
+
+endef
+
 # Project
 NAME=Pineapple
 
@@ -19,7 +24,7 @@ BUILD_OBJ=$(BUILD)/obj
 SRC_INTERFACE=$(SRC)/Interface
 SRC_RENDERER=$(SRC)/$(NAME)
 
-SRC_RENDERER_SOURCES=$(wildcard $(SRC_RENDERER)/*.cpp)
+SRC_RENDERER_SOURCES=$(shell find "$(SRC_RENDERER)" -name "*.cpp" -type f)
 SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:.cpp=.o)))
 
 # Specific links
@@ -45,7 +50,13 @@ Resources:
 $(BUILD_OBJ)/%.o: $(SRC_RENDERER)/%.cpp
 	$(CC) -c -I "$(INCLUDE)" $< -o $@ $(LINK_RENDERER)
 
-$(NAME): $(SRC_RENDERER_OBJECTS)
+$(NAME):
+	# Compile source files
+	$(foreach source, \
+		$(SRC_RENDERER_SOURCES), \
+		$(CC) -c -I "$(INCLUDE)" $(source) -o "$(BUILD_OBJ)/$(notdir $(source:.cpp=.o))" $(LINK_RENDERER) \
+	;${\n})
+	
 	# Compile shared library
 	# $(CC) -o "$(BUILD_BIN)/$(NAME).dll" -shared $(SRC_RENDERER_OBJECTS)
 

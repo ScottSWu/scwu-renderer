@@ -1,6 +1,6 @@
-#include "Pineapple/Mesh.hpp"
+#include "Pineapple/Shape/Mesh.hpp"
 
-Mesh::Mesh(const Material & inMaterial) :
+Mesh::Mesh(Material * inMaterial) :
         Surface(inMaterial) {
 
 }

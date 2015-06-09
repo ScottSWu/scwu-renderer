@@ -12,6 +12,10 @@ Renderer::Renderer() {
     registerRenderer();
 }
 
+Renderer::~Renderer() {
+
+}
+
 void Renderer::registerRenderer() {
     rendererId = RENDERER_COUNT++;
 }

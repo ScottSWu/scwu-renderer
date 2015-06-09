@@ -42,7 +42,7 @@ class GLShader {
          * @param name  Uniform name
          * @return  Uniform location int
          */
-        GLint getUniformLocation(std::string);
+        GLint getUniformLocation(const char *);
 };
 
 #endif

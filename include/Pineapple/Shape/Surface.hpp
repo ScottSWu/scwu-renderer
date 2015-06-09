@@ -4,7 +4,7 @@
 #include "Pineapple/Material.hpp"
 #include "Pineapple/Object3d.hpp"
 
-class Surface: Object3d {
+class Surface: public Object3d {
     public:
         /**
          * Initialize a new surface.
@@ -12,10 +12,10 @@ class Surface: Object3d {
          * @param mat   Surface material
          * @param mesh  Surface mesh
          */
-        Surface(const Material &);
+        Surface(Material * inMaterial = new Material());
 
         /** The material associated with this surface */
-        Material material;
+        Material * material;
 };
 
 #endif

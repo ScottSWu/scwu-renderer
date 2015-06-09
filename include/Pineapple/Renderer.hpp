@@ -33,6 +33,11 @@ class Renderer {
         Renderer();
 
         /**
+         * Destructor
+         */
+        virtual ~Renderer();
+
+        /**
          * Render the image to a float array.
          * The size of the given array must be greater than 4 * width * height.
          *

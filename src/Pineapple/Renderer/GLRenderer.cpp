@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <vector>
 
+#include "Pineapple/Renderer/GLRenderer.hpp"
 #include "Pineapple/Object3D.hpp"
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Renderer.hpp"
-#include "Pineapple/Renderer/GLRenderer.hpp"
 #include "Pineapple/Renderer/GLShader.hpp"
 #include "Pineapple/Shape/Mesh.hpp"
 
@@ -17,6 +17,10 @@ GLRenderer::GLRenderer() :
     mViewProjectionId = -1;
     mTransformId = -1;
     mTransformITId = -1;
+}
+
+GLRenderer::~GLRenderer() {
+
 }
 
 void GLRenderer::render(float imageBuffer[], Scene * scene) {
@@ -50,22 +54,22 @@ void GLRenderer::render(float imageBuffer[], Scene * scene) {
     shader.unbind();
 }
 
-/**
- Do initialization stuff.
- */
 void GLRenderer::initGL(Scene * scene) {
-     // Background color
-     glClearColor(0.f, 0.f, 0.5f, 1.f);
-     glEnable(GL_DEPTH_TEST);
-     
-     // TODO Provide functions for this stuff
-     
-     // Shader program and uniforms
-     shader.load("./res/Diffuse.vert", "./res/Diffuse.frag");
-     mViewProjectionId = shader.getUniformLocation("mViewProjection");
-     mTransformId = shader.getUniformLocation("mTransform");
-     mTransformITId = shader.getUniformLocation("mTransformIT");
-     
+    // Background color
+    glClearColor(0.f, 0.f, 0.5f, 1.f);
+    glEnable(GL_DEPTH_TEST);
+
+    // TODO Provide functions for this stuff
+
+    // Shader program and uniforms
+    shader.load("./res/Diffuse.vert", "./res/Diffuse.frag");
+    mViewProjectionId = shader.getUniformLocation("mViewProjection");
+    mTransformId = shader.getUniformLocation("mTransform");
+    mTransformITId = shader.getUniformLocation("mTransformIT");
+
+    // Create buffers
+    generateBuffers(scene->getObjects());
+
     /**
      // Basic grid
      Mesh grid;
@@ -106,4 +110,8 @@ void GLRenderer::initGL(Scene * scene) {
      */
 
     init = true;
+}
+
+void generateBuffers(std::vector<Object3d> objects) {
+
 }

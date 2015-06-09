@@ -10,10 +10,10 @@ class PerspectiveCamera: public Camera {
         /**
          * Initialize a new perspective camera.
          */
-        PerspectiveCamera();
+        PerspectiveCamera(float inFov = 45.f);
 
         /** Field of view */
-        float fov = 45.f;
+        float fov;
 
         /**
          * Compute the perspective projection matrix to transform into normalized space.

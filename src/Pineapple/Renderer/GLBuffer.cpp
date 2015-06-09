@@ -8,7 +8,7 @@
 #include "Pineapple/Shape/Vertex.hpp"
 #include "Pineapple/Shape/Triangle.hpp"
 
-GLBuffer::GLBuffer(const Mesh & m) {
+GLBuffer::GLBuffer(Mesh * m) {
     // Set the parent
     parent = m;
     
@@ -20,41 +20,40 @@ GLBuffer::GLBuffer(const Mesh & m) {
     glGenBuffers(1, &colorBuffer);
 
     // Fill buffers
-    int vertices = m.vertices.size();
-    int faces = m.faces.size();
+    int vertices = m->vertices.size();
+    int faces = m->faces.size();
 
     std::vector<glm::vec3> positionList;
     for (int i = 0; i < vertices; i++)
-        positionList.push_back(m.vertices[i].position);
+        positionList.push_back(m->vertices[i].position);
     glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec3), &(positionList)[0], GL_STATIC_DRAW);
     
     std::vector<glm::vec3> normalList;
     for (int i = 0; i < vertices; i++)
-        normalList.push_back(m.vertices[i].normal);
+        normalList.push_back(m->vertices[i].normal);
     glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec3), &(normalList)[0], GL_STATIC_DRAW);
     
     std::vector<glm::vec2> uvList;
     for (int i = 0; i < vertices; i++)
-        uvList.push_back(m.vertices[i].uv);
+        uvList.push_back(m->vertices[i].uv);
     glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec2), &(uvList)[0], GL_STATIC_DRAW);
 
     std::vector<glm::vec4> colorList;
     for (int i = 0; i < vertices; i++)
-        colorList.push_back(m.vertices[i].color);
+        colorList.push_back(m->vertices[i].color);
     glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec4), &(colorList)[0], GL_STATIC_DRAW);
 
     // Assign indices
-    if (m.wireframe) { // Reindex vertices to work with GL_LINES
+    if (m->wireframe) { // Reindex vertices to work with GL_LINES
         std::vector<glm::uvec2> indices;
         
-        Triangle face;
         glm::uvec3 index;
         for (int i = 0; i < faces; i++) {
-            face = m.faces[i];
+            Triangle face = m->faces[i];
             index = face.getIndices();
             indices.push_back(glm::uvec2(index.x, index.y));
             indices.push_back(glm::uvec2(index.y, index.z));
@@ -70,10 +69,9 @@ GLBuffer::GLBuffer(const Mesh & m) {
     else {
         std::vector<glm::uvec3> indices;
 
-        Triangle face;
         glm::uvec3 index;
         for (int i = 0; i < faces; i++) {
-            face = m.faces[i];
+            Triangle face = m->faces[i];
             index = face.getIndices();
             indices.push_back(index);
         }

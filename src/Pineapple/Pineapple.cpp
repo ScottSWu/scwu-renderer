@@ -4,6 +4,8 @@
 
 #include "Pineapple/Light.hpp"
 #include "Pineapple/Object3d.hpp"
+#include "Pineapple/Renderer.hpp"
+#include "Pineapple/Renderer/GLRenderer.hpp"
 #include "Pineapple/Pineapple.hpp"
 
 Pineapple::Pineapple() {

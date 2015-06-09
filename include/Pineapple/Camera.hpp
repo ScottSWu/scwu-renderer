@@ -13,6 +13,11 @@ class Camera {
          */
         Camera();
 
+        /**
+         * Destructor
+         */
+        virtual ~Camera();
+
         /** Positive viewport width and height */
         glm::ivec2 viewport;
         /** Near and far planes */

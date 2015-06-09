@@ -7,6 +7,10 @@ Camera::Camera() {
     
 }
 
+Camera::~Camera() {
+
+}
+
 glm::mat4 Camera::computeCameraMatrix() {
     return glm::lookAt(position, target, up);
 }

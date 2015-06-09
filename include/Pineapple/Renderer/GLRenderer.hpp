@@ -12,7 +12,7 @@
 #include "Pineapple/Scene.hpp"
 
 /**
- Defines a renderer using opengl.
+ * Defines a renderer using opengl.
  */
 class GLRenderer: public Renderer {
     protected:
@@ -36,11 +36,21 @@ class GLRenderer: public Renderer {
          * @param scene     The scene to initialize with
          */
         void initGL(Scene *);
+
+        /**
+         * Generate vertex buffers for a list of objects and their children.
+         */
+        void generateBuffers(std::vector<Object3d>);
     public:
         /**
          * Initialize a new OpenGL renderer.
          */
         GLRenderer();
+
+        /**
+         * Destructor
+         */
+        ~GLRenderer();
 
         /**
          * Renders an image to the current gl context.

@@ -8,9 +8,9 @@ Triangle::Triangle(Mesh * inParent, unsigned int inV0, unsigned int inV1, unsign
 }
 
 void Triangle::computeNormal() {
-    glm::vec3 v0 = parent->vertices[vertex0];
-    glm::vec3 v1 = parent->vertices[vertex1];
-    glm::vec3 v2 = parent->vertices[vertex2];
+    glm::vec3 v0 = parent->vertices[vertex0].position;
+    glm::vec3 v1 = parent->vertices[vertex1].position;
+    glm::vec3 v2 = parent->vertices[vertex2].position;
 
     normal = glm::normalize(glm::cross(v0 - v1, v2 - v1));
 }

@@ -4,9 +4,9 @@
 #include "Pineapple/Camera/PerspectiveCamera.hpp"
 #include "Pineapple/Camera.hpp"
 
-PerspectiveCamera::PerspectiveCamera() :
+PerspectiveCamera::PerspectiveCamera(float inFov) :
         Camera() {
-
+    fov = inFov;
 }
 
 glm::mat4 PerspectiveCamera::computeProjectionMatrix() {

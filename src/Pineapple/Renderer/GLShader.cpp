@@ -107,6 +107,6 @@ void GLShader::unbind() {
     glUseProgram(-1);
 }
 
-GLint GLShader::getUniformLocation(std::string name) {
+GLint GLShader::getUniformLocation(const char * name) {
     return glGetUniformLocation(programId, name);
 }
