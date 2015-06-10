@@ -13,7 +13,7 @@ Renderer::Renderer() {
 }
 
 Renderer::~Renderer() {
-
+    
 }
 
 void Renderer::registerRenderer() {

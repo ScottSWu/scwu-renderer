@@ -40,7 +40,7 @@ class GLRenderer: public Renderer {
         /**
          * Generate vertex buffers for a list of objects and their children.
          */
-        void generateBuffers(std::vector<Object3d>);
+        void generateBuffers(std::vector<Object3d> &);
     public:
         /**
          * Initialize a new OpenGL renderer.

@@ -8,7 +8,7 @@ Camera::Camera() {
 }
 
 Camera::~Camera() {
-
+    
 }
 
 glm::mat4 Camera::computeCameraMatrix() {
@@ -21,17 +21,17 @@ glm::mat4 Camera::computeProjectionMatrix() {
 }
 
 void Camera::translate(float mx, float my) {
-
+    
 }
 
 void Camera::rotate(float mx, float my) {
-
+    
 }
 
 void Camera::zoom(float mx, float my) {
-
+    
 }
 
 void Camera::tilt(float mx, float my) {
-
+    
 }

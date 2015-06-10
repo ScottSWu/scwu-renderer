@@ -1,1 +1,1 @@
-.\build\bin\Placeholder-gui.exe
+.\build\bin\Pineapple-gui.exe

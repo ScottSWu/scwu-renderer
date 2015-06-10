@@ -22,21 +22,21 @@ class Scene {
          *
          * @return  Camera associated with this scene
          */
-        Camera getCamera();
+        Camera & getCamera();
 
         /**
          * Return the scene's list of objects.
          *
          * @return  List of objects associated with this scene
          */
-        std::vector<Object3d> getObjects();
+        std::vector<Object3d> & getObjects();
 
         /**
          * Return the scene's list of lights.
          *
          * @return  List of lgihts associated with this scene
          */
-        std::vector<Light> getLights();
+        std::vector<Light> & getLights();
 
         /**
          * Set the camera viewport size.

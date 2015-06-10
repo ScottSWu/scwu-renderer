@@ -26,6 +26,11 @@ class Mesh: public Surface {
         /** List of faces */
         std::vector<Triangle> faces;
 
+        /** Whether or not vertices have uv */
+        bool hasUVs;
+        /** Whether or not vertices have colors */
+        bool hasColors;
+
         /**
          * Compute vertex and face normals.
          */

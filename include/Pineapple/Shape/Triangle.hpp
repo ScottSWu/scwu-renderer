@@ -30,7 +30,7 @@ class Triangle {
         /** The third vertex in the triangle */
         unsigned int vertex2;
 
-         /** Triangle normal */
+        /** Triangle normal */
         glm::vec3 normal;
 
         /**

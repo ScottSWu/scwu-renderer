@@ -1,15 +1,14 @@
-
 #include "Pineapple/Scene.hpp"
 
-Camera Scene::getCamera() {
+Camera & Scene::getCamera() {
     return camera;
 }
 
-std::vector<Object3d> Scene::getObjects() {
+std::vector<Object3d> & Scene::getObjects() {
     return objects;
 }
 
-std::vector<Light> Scene::getLights() {
+std::vector<Light> & Scene::getLights() {
     return lights;
 }
 

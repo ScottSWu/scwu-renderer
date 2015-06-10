@@ -9,20 +9,15 @@
  */
 class Object3d {
     protected:
-        /** List of children */
-        std::vector<Object3d> children;
-        /** Indexed locations for multiple renderers */
-        std::vector<int> rendererIndex;
-
-        /** Computed complete transformation matrix */
-        glm::mat4 worldTransform;
-        /** Inverse transpose of the complete transformation matrix */
-        glm::mat4 worldTransformIT;
     public:
         /**
          * Initialize a new object.
          */
         Object3d();
+        /**
+         * Destructor
+         */
+        virtual ~Object3d();
 
         /** Whether or not the object is visible */
         bool visible;
@@ -32,6 +27,16 @@ class Object3d {
         bool wireframe;
         /** Local transformation matrix */
         glm::mat4 transform;
+
+        /** List of children */
+        std::vector<Object3d> children;
+        /** Indexed locations for multiple renderers */
+        std::vector<int> rendererIndex;
+
+        /** Computed complete transformation matrix */
+        glm::mat4 worldTransform;
+        /** Inverse transpose of the complete transformation matrix */
+        glm::mat4 worldTransformIT;
 
         /**
          * Recursively compute the world transform.

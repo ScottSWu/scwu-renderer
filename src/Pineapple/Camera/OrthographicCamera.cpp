@@ -5,7 +5,7 @@
 
 OrthographicCamera::OrthographicCamera() :
         Camera() {
-
+    
 }
 
 glm::mat4 OrthographicCamera::computeProjectionMatrix() {

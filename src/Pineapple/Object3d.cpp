@@ -10,11 +10,15 @@ Object3d::Object3d() {
     wireframe = false;
 }
 
+Object3d::~Object3d() {
+
+}
+
 void Object3d::computeTransform(glm::mat4 parentTransform) {
     worldTransform = parentTransform * transform;
     worldTransformIT = glm::inverseTranspose(worldTransform);
-
-    for (int i=0, l=children.size(); i<l; i++) {
+    
+    for (int i = 0, l = children.size(); i < l; i++) {
         children[i].computeTransform(worldTransform);
     }
 }
