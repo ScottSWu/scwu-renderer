@@ -7,6 +7,8 @@
 #include <Windows.h>
 
 #include "Pineapple/Pineapple.hpp"
+#include "Pineapple/Camera.hpp"
+#include "Pineapple/Camera/PerspectiveCamera.hpp"
 
 #define PI 3.141592653f
 
@@ -84,8 +86,10 @@ int main(void) {
     }
     
     // Renderer variables
+    Camera * c = new PerspectiveCamera(640, 480, 0.1f, 100.f, 45.f);
     Pineapple p;
     Scene * s = p.getScene();
+    s->camera = c;
     int width, height, newWidth, newHeight;
     float dummy[1];
     
@@ -132,6 +136,7 @@ int main(void) {
         
         if (currTime - lastFrame > 1.0) {
             printf("Frames per second: %d\n", frameCounter - lastFrameCount);
+            printf("Camera: %f %f %f\n", x, y, z);
             lastFrameCount = frameCounter;
             lastFrame = currTime;
         }

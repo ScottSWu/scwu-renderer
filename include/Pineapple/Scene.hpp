@@ -4,25 +4,25 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "Pineapple/Camera/OrthographicCamera.hpp"
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Object3d.hpp"
 #include "Pineapple/Light.hpp"
 
 class Scene {
     protected:
-        /** Viewing camera */
-        Camera camera;
         /** List of objects in the scene */
         std::vector<Object3d> objects;
         /** List of lights in the scene */
         std::vector<Light> lights;
     public:
         /**
-         * Return the scene's camera.
-         *
-         * @return  Camera associated with this scene
+         * Initialize a new scene with a camera.
          */
-        Camera & getCamera();
+        Scene(Camera * inCamera = new OrthographicCamera(320, 320, -1.f, 1.f, 1.f, -1.f, 0.1, 100.f));
+
+        /** Viewing camera */
+        Camera * camera;
 
         /**
          * Return the scene's list of objects.

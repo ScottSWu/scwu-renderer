@@ -12,6 +12,11 @@ class PerspectiveCamera: public Camera {
          */
         PerspectiveCamera(float inFov = 45.f);
 
+        /**
+         * Initialize a new perspective camera.
+         */
+        PerspectiveCamera(int width = 320, int height = 320, float near = 0.1f, float far = 0.1f, float inFov = 45.f);
+
         /** Field of view */
         float fov;
 

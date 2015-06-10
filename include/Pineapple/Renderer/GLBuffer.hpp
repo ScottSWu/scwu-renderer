@@ -11,7 +11,7 @@
 class GLBuffer {
     protected:
         /** The parent mesh that the buffers were generated from. */
-        Mesh * parent;
+        Mesh parent;
 
         /** Drawing mode, e.g. GL_LINES or GL_TRIANGLES */
         GLenum mode;
@@ -33,7 +33,7 @@ class GLBuffer {
          *
          * @param mesh  The mesh to generate from
          */
-        GLBuffer(Mesh *);
+        GLBuffer(Mesh &);
 
         /**
          * Draw the GLBuffers to the current gl context.

@@ -3,8 +3,12 @@
 
 #include "Pineapple/Camera.hpp"
 
-Camera::Camera() {
-    
+Camera::Camera(int width, int height, float near, float far) :
+        target(0.f, 0.f, 1.f), up(0.f, 1.f, 0.f) {
+    viewport.x = width;
+    viewport.y = height;
+    planes.x = near;
+    planes.y = far;
 }
 
 Camera::~Camera() {

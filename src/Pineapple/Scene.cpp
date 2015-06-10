@@ -1,7 +1,7 @@
 #include "Pineapple/Scene.hpp"
 
-Camera & Scene::getCamera() {
-    return camera;
+Scene::Scene(Camera * inCamera) {
+    camera = inCamera;
 }
 
 std::vector<Object3d> & Scene::getObjects() {
@@ -13,15 +13,15 @@ std::vector<Light> & Scene::getLights() {
 }
 
 void Scene::setCameraViewport(int width, int height) {
-    camera.viewport = glm::ivec2(width, height);
+    camera->viewport = glm::ivec2(width, height);
 }
 
 void Scene::setCameraPosition(float x, float y, float z) {
-    camera.position = glm::vec3(x, y, z);
+    camera->position = glm::vec3(x, y, z);
 }
 
 void Scene::setCameraTarget(float x, float y, float z) {
-    camera.target = glm::vec3(x, y, z);
+    camera->target = glm::vec3(x, y, z);
 }
 
 void Scene::addObject(const Object3d & object) {

@@ -23,15 +23,16 @@ GLRenderer::~GLRenderer() {
     
 }
 
+bool _tmp_first = true;
 void GLRenderer::render(float imageBuffer[], Scene * scene) {
     if (!init) {
         initGL(scene);
     }
     
-    Camera camera = scene->getCamera();
+    Camera * camera = scene->camera;
     
-    int width = camera.viewport.x;
-    int height = camera.viewport.y;
+    int width = camera->viewport.x;
+    int height = camera->viewport.y;
     
     float ratio = (float) width / (float) height;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -39,10 +40,10 @@ void GLRenderer::render(float imageBuffer[], Scene * scene) {
     shader.bind();
     
     // Compute uniforms
-    glm::mat4 mViewProjection = camera.computeProjectionMatrix() * camera.computeCameraMatrix();
+    glm::mat4 mViewProjection = camera->computeProjectionMatrix() * camera->computeCameraMatrix();
     glm::mat4 mTransform;
     glm::mat4 mTransformIT;
-    
+
     glUniformMatrix4fv(mViewProjectionId, 1, GL_FALSE, &mViewProjection[0][0]);
     glUniformMatrix4fv(mTransformId, 1, GL_FALSE, &mTransform[0][0]);
     glUniformMatrix4fv(mTransformITId, 1, GL_FALSE, &mTransformIT[0][0]);
@@ -66,6 +67,7 @@ void GLRenderer::initGL(Scene * scene) {
     mViewProjectionId = shader.getUniformLocation("mViewProjection");
     mTransformId = shader.getUniformLocation("mTransform");
     mTransformITId = shader.getUniformLocation("mTransformIT");
+    //printf("%d %d %d\n", mViewProjectionId, mTransformId, mTransformITId);
     
     // Create buffers
     generateBuffers(scene->getObjects());
@@ -113,12 +115,13 @@ void GLRenderer::initGL(Scene * scene) {
     std::vector<Triangle> faces;
     for (unsigned int i = 0; i < 9 * 2; i++) {
         Triangle t(&grid, 3 * i + 0, 3 * i + 1, 3 * i + 2);
+        faces.push_back(t);
     }
     grid.faces.swap(faces);
 
     grid.wireframe = true;
 
-    GLBuffer gridBuffer(&grid);
+    GLBuffer gridBuffer(grid);
 
     buffers.push_back(gridBuffer);
 
@@ -128,6 +131,7 @@ void GLRenderer::initGL(Scene * scene) {
 }
 
 void GLRenderer::generateBuffers(std::vector<Object3d> & objects) {
+    /*
     for (int i = 0, l = objects.size(); i < l; i++) {
         Object3d o = objects[i];
         Mesh * m = dynamic_cast<Mesh*>(&o);
@@ -137,4 +141,5 @@ void GLRenderer::generateBuffers(std::vector<Object3d> & objects) {
         }
         generateBuffers(objects[i].children);
     }
+    */
 }

@@ -11,7 +11,7 @@ class Camera {
         /**
          * Initialize a default camera.
          */
-        Camera();
+        Camera(int width = 320, int height = 320, float near = 0.1f, float far = 100.f);
 
         /**
          * Destructor
