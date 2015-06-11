@@ -14,6 +14,7 @@
 
 bool keys[512];
 glm::vec3 cam = glm::vec3(PI / 4.f, PI / 6.f, 8.f);
+double prevMouseX, prevMouseY;
 
 static void error_callback(int error, const char* message) {
     fputs(message, stderr);
@@ -47,15 +48,27 @@ static void handleKeys(double duration) {
     else if (keys[GLFW_KEY_RIGHT]) {
         cam.x -= rate;
     }
-    
-    if (cam.y > PI / 2.f - 0.1f) {
-        cam.y = PI / 2.f - 0.1f;
+}
+
+static void handleMouse(double duration, GLFWwindow * window, Camera * camera) {
+    int mb;
+    double mx, my;
+    glfwGetCursorPos(window, &mx, &my);
+    mb = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+
+    double rate = duration;
+
+    if (mb == GLFW_PRESS) {
+        double dx = mx - prevMouseX;
+        double dy = my - prevMouseY;
+        //printf("%lf %lf\n", dx, dy);
+
+        cam.x += rate * dx;
+        cam.y += rate * dy;
     }
-    else if (cam.y < -PI / 2.f + 0.1f) {
-        cam.y = -PI / 2.f + 0.1f;
-    }
-    
-    cam.x = (float) fmod(cam.x, 2.f * PI);
+
+    prevMouseX = mx;
+    prevMouseY = my;
 }
 
 int main(void) {
@@ -68,7 +81,7 @@ int main(void) {
     
     glfwSetErrorCallback(error_callback);
     
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Pineapple Renderer", NULL, NULL);
+    GLFWwindow * window = glfwCreateWindow(640, 480, "Pineapple Renderer", NULL, NULL);
     
     if (!window) {
         printf("glfw window failed to initialize.");
@@ -102,6 +115,9 @@ int main(void) {
     double lastFrame = currTime;
     long frameCounter = 0;
     
+    // Initial inputs
+    glfwGetCursorPos(window, &prevMouseX, &prevMouseY);
+
     while (!glfwWindowShouldClose(window)) {
         glfwGetFramebufferSize(window, &newWidth, &newHeight);
         
@@ -143,8 +159,19 @@ int main(void) {
         
         frameCounter++;
         
-        // Handle keys
+        // Handle Inputs
         handleKeys(duration);
+        handleMouse(duration, window, c);
+
+        // Keep camera angles from overflowing
+        if (cam.y > PI / 2.f - 0.1f) {
+            cam.y = PI / 2.f - 0.1f;
+        }
+        else if (cam.y < -PI / 2.f + 0.1f) {
+            cam.y = -PI / 2.f + 0.1f;
+        }
+
+        cam.x = (float) fmod(cam.x, 2.f * PI);
     }
     
     glfwDestroyWindow(window);
