@@ -7,7 +7,7 @@ endef
 NAME=Pineapple
 
 # Compiler
-CC=g++
+CC=g++ -g -O0
 
 # Archiver
 AR=ar

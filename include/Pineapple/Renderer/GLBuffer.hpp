@@ -10,9 +10,6 @@
  */
 class GLBuffer {
     protected:
-        /** The parent mesh that the buffers were generated from. */
-        Mesh parent;
-
         /** Drawing mode, e.g. GL_LINES or GL_TRIANGLES */
         GLenum mode;
         /** Number of indices in the buffer */

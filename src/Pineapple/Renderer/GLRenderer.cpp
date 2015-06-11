@@ -76,48 +76,35 @@ void GLRenderer::initGL(Scene * scene) {
     // Basic grid
     Mesh grid;
 
-    std::vector<Vertex> vertices;
-    Vertex v;
     for (int i = -4; i <= 4; i++) {
-        v = Vertex();
-        v.position = glm::vec3(-4.f, 0.f, (float) i);
-        v.normal = glm::vec3(0.f, 1.f, 0.f);
-        vertices.push_back(v);
+        grid.positions.push_back(glm::vec4(-4.f, 0.f, (float) i, 1.f));
+        grid.normals.push_back(glm::vec4(0.f, 1.f, 0.f, 1.f));
 
-        v = Vertex();
-        v.position = glm::vec3(4.f, 0.f, (float) i);
-        v.normal = glm::vec3(0.f, 1.f, 0.f);
-        vertices.push_back(v);
+        grid.positions.push_back(glm::vec4(4.f, 0.f, (float) i, 1.f));
+        grid.normals.push_back(glm::vec4(0.f, 1.f, 0.f, 1.f));
 
-        v = Vertex();
-        v.position = glm::vec3(4.f, 0.f, (float) i);
-        v.normal = glm::vec3(0.f, 1.f, 0.f);
-        vertices.push_back(v);
+        grid.positions.push_back(glm::vec4(4.f, 0.f, (float) i, 1.f));
+        grid.normals.push_back(glm::vec4(0.f, 1.f, 0.f, 1.f));
 
-        v = Vertex();
-        v.position = glm::vec3((float) i, 0.f, -4.f);
-        v.normal = glm::vec3(0.f, 1.f, 0.f);
-        vertices.push_back(v);
+        grid.positions.push_back(glm::vec4((float) i, 0.f, -4.f, 1.f));
+        grid.normals.push_back(glm::vec4(0.f, 1.f, 0.f, 1.f));
 
-        v = Vertex();
-        v.position = glm::vec3((float) i, 0.f, 4.f);
-        v.normal = glm::vec3(0.f, 1.f, 0.f);
-        vertices.push_back(v);
+        grid.positions.push_back(glm::vec4((float) i, 0.f, 4.f, 1.f));
+        grid.normals.push_back(glm::vec4(0.f, 1.f, 0.f, 1.f));
 
-        v = Vertex();
-        v.position = glm::vec3((float) i, 0.f, 4.f);
-        v.normal = glm::vec3(0.f, 1.f, 0.f);
-        vertices.push_back(v);
+        grid.positions.push_back(glm::vec4((float) i, 0.f, 4.f, 1.f));
+        grid.normals.push_back(glm::vec4(0.f, 1.f, 0.f, 1.f));
+
+        grid.vertexCount += 6;
     }
-    grid.vertices.swap(vertices);
+
+    grid.fillDefault();
 
     // Indices
-    std::vector<Triangle> faces;
     for (unsigned int i = 0; i < 9 * 2; i++) {
-        Triangle t(&grid, 3 * i + 0, 3 * i + 1, 3 * i + 2);
-        faces.push_back(t);
+        grid.faces.push_back(glm::uvec3(3 * i + 0, 3 * i + 1, 3 * i + 2));
+        grid.faceCount++;
     }
-    grid.faces.swap(faces);
 
     grid.wireframe = true;
 
@@ -132,14 +119,14 @@ void GLRenderer::initGL(Scene * scene) {
 
 void GLRenderer::generateBuffers(std::vector<Object3d> & objects) {
     /*
-    for (int i = 0, l = objects.size(); i < l; i++) {
-        Object3d o = objects[i];
-        Mesh * m = dynamic_cast<Mesh*>(&o);
-        if (m != 0) {
-            GLBuffer glb(m);
-            buffers.push_back(glb);
-        }
-        generateBuffers(objects[i].children);
-    }
-    */
+     for (int i = 0, l = objects.size(); i < l; i++) {
+     Object3d o = objects[i];
+     Mesh * m = dynamic_cast<Mesh*>(&o);
+     if (m != 0) {
+     GLBuffer glb(m);
+     buffers.push_back(glb);
+     }
+     generateBuffers(objects[i].children);
+     }
+     */
 }

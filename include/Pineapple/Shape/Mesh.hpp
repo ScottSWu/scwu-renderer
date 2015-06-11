@@ -5,8 +5,6 @@
 #include <vector>
 
 #include "Pineapple/Shape/Surface.hpp"
-#include "Pineapple/Shape/Vertex.hpp"
-#include "Pineapple/Shape/Triangle.hpp"
 #include "Pineapple/Object3d.hpp"
 
 class Triangle;
@@ -21,15 +19,28 @@ class Mesh: public Surface {
          */
         Mesh(Material * inMaterial = new Material());
 
-        /** List of vertices */
-        std::vector<Vertex> vertices;
+        /** List of positions */
+        std::vector<glm::vec4> positions;
+        /** List of normals */
+        std::vector<glm::vec4> normals;
+        /** List of UVs */
+        std::vector<glm::vec2> uvs;
+        /** list of colors */
+        std::vector<glm::vec4> colors;
         /** List of faces */
-        std::vector<Triangle> faces;
+        std::vector<glm::uvec3> faces;
+        /** List of face normals */
+        std::vector<glm::vec4> faceNormals;
 
-        /** Whether or not vertices have uv */
-        bool hasUVs;
-        /** Whether or not vertices have colors */
-        bool hasColors;
+        /** Number of vertices */
+        int vertexCount;
+        /** Number of faces */
+        int faceCount;
+
+        /**
+         * Fill empty vectors with default data.
+         */
+        void fillDefault();
 
         /**
          * Compute vertex and face normals.
