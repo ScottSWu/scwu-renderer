@@ -44,6 +44,30 @@ class Camera {
         virtual glm::mat4 computeProjectionMatrix();
 
         /**
+         * Set the viewport size.
+         *
+         * @param width    Viewport width
+         * @param height   Viewport height
+         */
+        void setViewport(int, int);
+        /**
+         * Set the position.
+         *
+         * @param x    x coordinate
+         * @param y    y coordinate
+         * @param z    z coordinate
+         */
+        void setPosition(float, float, float);
+        /**
+         * Set the viewing target.
+         *
+         * @param x    x coordinate
+         * @param y    y coordinate
+         * @param z    z coordinate
+         */
+        void setTarget(float, float, float);
+
+        /**
          * Translate (pan) the camera by the specified mouse movement.
          *
          * @param mx    Mouse x movement

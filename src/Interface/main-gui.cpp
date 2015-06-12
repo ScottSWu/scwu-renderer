@@ -13,14 +13,14 @@
 #define PI 3.141592653f
 
 bool keys[512];
-glm::vec3 cam = glm::vec3(PI / 4.f, PI / 6.f, 8.f);
 double prevMouseX, prevMouseY;
+double scrollWheel;
 
 static void error_callback(int error, const char* message) {
     fputs(message, stderr);
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+static void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
@@ -33,42 +33,64 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
 }
 
-static void handleKeys(double duration) {
-    float rate = (float) (duration * 0.04 * 60);
-    if (keys[GLFW_KEY_UP]) {
-        cam.y += rate;
-    }
-    else if (keys[GLFW_KEY_DOWN]) {
-        cam.y -= rate;
-    }
-    
-    if (keys[GLFW_KEY_LEFT]) {
-        cam.x += rate;
-    }
-    else if (keys[GLFW_KEY_RIGHT]) {
-        cam.x -= rate;
-    }
+static void mousewheel_callback(GLFWwindow * window, double scrollX, double scrollY) {
+    scrollWheel += scrollX + scrollY;
 }
 
-static void handleMouse(double duration, GLFWwindow * window, Camera * camera) {
+static void handleInput(double duration, GLFWwindow * window, Camera * camera) {
+    // Keys
+    if (keys[GLFW_KEY_PERIOD]) {
+        camera->setTarget(0.f, 0.f, 0.f);
+    }
+
+    // Mouse
     int mb;
     double mx, my;
     glfwGetCursorPos(window, &mx, &my);
+    double dx = mx - prevMouseX;
+    double dy = my - prevMouseY;
+
+    // Rotation
     mb = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-
-    double rate = duration;
-
     if (mb == GLFW_PRESS) {
-        double dx = mx - prevMouseX;
-        double dy = my - prevMouseY;
-        //printf("%lf %lf\n", dx, dy);
+        camera->rotate(dx, dy);
+    }
 
-        cam.x += rate * dx;
-        cam.y += rate * dy;
+    // Translation
+    mb = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+    if (mb == GLFW_PRESS) {
+        camera->translate(dx, dy);
     }
 
     prevMouseX = mx;
     prevMouseY = my;
+
+    // Scroll wheel
+    double scrollAmount = abs(scrollWheel);
+    if (scrollAmount < 1) {
+        camera->zoom(scrollWheel, 0.f);
+        scrollWheel = 0;
+    }
+    else if (scrollAmount < 5) {
+        if (scrollWheel < 0) {
+            camera->zoom(-1, 0.f);
+            scrollWheel += 1;
+        }
+        else {
+            camera->zoom(1, 0.f);
+            scrollWheel -= 1;
+        }
+    }
+    else {
+        if (scrollWheel < 0) {
+            camera->zoom(-3, 0.f);
+            scrollWheel += 3;
+        }
+        else {
+            camera->zoom(3, 0.f);
+            scrollWheel -= 3;
+        }
+    }
 }
 
 int main(void) {
@@ -81,7 +103,7 @@ int main(void) {
     
     glfwSetErrorCallback(error_callback);
     
-    GLFWwindow * window = glfwCreateWindow(640, 480, "Pineapple Renderer", NULL, NULL);
+    GLFWwindow * window = glfwCreateWindow(960, 540, "Pineapple Renderer", NULL, NULL);
     
     if (!window) {
         printf("glfw window failed to initialize.");
@@ -91,7 +113,9 @@ int main(void) {
     
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
+
     glfwSetKeyCallback(window, key_callback);
+    glfwSetScrollCallback(window, mousewheel_callback);
     
     if (glewInit() != GLEW_OK) {
         printf("glew failed to initialize.");
@@ -100,6 +124,8 @@ int main(void) {
     
     // Renderer variables
     Camera * c = new PerspectiveCamera(640, 480, 0.1f, 100.f, 45.f);
+    c->setTarget(0.f, 0.f, 0.f);
+    c->setPosition(4.f, 4.f, 4.f);
     Pineapple p;
     Scene * s = p.getScene();
     s->camera = c;
@@ -128,13 +154,6 @@ int main(void) {
             height = newHeight;
         }
         
-        // Set and update camera orientation
-        float x = (float) (cam.z * cos(cam.y) * cos(cam.x));
-        float y = (float) (cam.z * sin(cam.y));
-        float z = (float) (cam.z * cos(cam.y) * sin(cam.x));
-        s->setCameraPosition(x, y, z);
-        s->setCameraTarget(0.f, 0.f, 0.f);
-        
         // Main rendering
         p.visualize();
         
@@ -146,32 +165,22 @@ int main(void) {
         currTime = glfwGetTime();
         duration = currTime - lastTime;
         if (duration < targetRate) {
-            Sleep((int) ((targetRate - duration) * 1000));
             lastTime = currTime;
         }
         
+        Sleep(16);
+
         if (currTime - lastFrame > 1.0) {
             printf("Frames per second: %d\n", frameCounter - lastFrameCount);
-            printf("Camera: %f %f %f\n", x, y, z);
+            //printf("Camera: %f %f %f\n", x, y, z);
             lastFrameCount = frameCounter;
             lastFrame = currTime;
         }
         
         frameCounter++;
         
-        // Handle Inputs
-        handleKeys(duration);
-        handleMouse(duration, window, c);
-
-        // Keep camera angles from overflowing
-        if (cam.y > PI / 2.f - 0.1f) {
-            cam.y = PI / 2.f - 0.1f;
-        }
-        else if (cam.y < -PI / 2.f + 0.1f) {
-            cam.y = -PI / 2.f + 0.1f;
-        }
-
-        cam.x = (float) fmod(cam.x, 2.f * PI);
+        // Handle Input
+        handleInput(duration, window, c);
     }
     
     glfwDestroyWindow(window);
