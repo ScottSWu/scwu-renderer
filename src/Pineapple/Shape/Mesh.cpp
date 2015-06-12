@@ -1,7 +1,7 @@
 #include "Pineapple/Shape/Mesh.hpp"
 
 Mesh::Mesh(Material * inMaterial) :
-        Surface(inMaterial) {
+        Surface(inMaterial), vertexCount(0), faceCount(0) {
     
 }
 

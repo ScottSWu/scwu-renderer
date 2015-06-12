@@ -6,8 +6,9 @@ endef
 # Project
 NAME=Pineapple
 
-# Compiler
+# Compilers
 CC=g++ -g -O0
+WR=windres
 
 # Archiver
 AR=ar
@@ -15,8 +16,10 @@ AR=ar
 # Locations
 BUILD=./build
 SRC=./src
-LIBRARY=./lib/dynamic
+LIBRARYD=./lib/dynamic
+LIBRARYS=./lib/static
 INCLUDE=./include
+RESOURCES=./res
 
 # Specific Locations
 BUILD_BIN=$(BUILD)/bin
@@ -30,7 +33,7 @@ SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:
 # Specific links
 LINK_RENDERER=-lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32
 LINK_CLI=-l$(NAME)
-LINK_GUI=-l$(NAME) -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32
+LINK_GUI=-l$(NAME) -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -ltinyobjloader -lComdlg32
 
 all: Folders Resources $(NAME) Libraries cli gui
 	# Finished!
@@ -45,16 +48,14 @@ Folders:
 	mkdir -p $(BUILD_OBJ)
 
 Resources:
-	# TODO Copy resources to build directory
-
-$(BUILD_OBJ)/%.o: $(SRC_RENDERER)/%.cpp
-	$(CC) -c -I "$(INCLUDE)" $< -o $@ $(LINK_RENDERER)
+	# Copy resources
+	cp -r $(RESOURCES) $(BUILD_BIN)
 
 $(NAME):
 	# Compile source files
 	$(foreach source, \
 		$(SRC_RENDERER_SOURCES), \
-		$(CC) -c -I "$(INCLUDE)" $(source) -o "$(BUILD_OBJ)/$(notdir $(source:.cpp=.o))" $(LINK_RENDERER) \
+		$(CC) -c -I "$(INCLUDE)" "$(source)" -o "$(BUILD_OBJ)/$(notdir $(source:.cpp=.o))" \
 	;${\n})
 	
 	# Compile shared library
@@ -65,16 +66,19 @@ $(NAME):
 
 Libraries:
 	# Copy dynamic Libraries
-	cp $(LIBRARY)/* $(BUILD_BIN)
+	cp $(LIBRARYD)/* $(BUILD_BIN)
 
 cli:
 	# Make cli
 	$(CC) -o "$(BUILD_BIN)/$(NAME)-cli.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" "$(SRC_INTERFACE)/main-cli.cpp" $(LINK_CLI)
 
 gui:
-	$(CC) -o "$(BUILD_BIN)/$(NAME)-gui.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" -L "$(LIBRARY)" "$(SRC_INTERFACE)/main-gui.cpp" $(LINK_GUI)
+	# Compile resource file
+	$(WR) -I "$(INCLUDE)" "$(SRC_INTERFACE)/resources.rc" "$(BUILD_OBJ)/resources.o"
+	
+	# Make gui
+	$(CC) -o "$(BUILD_BIN)/$(NAME)-gui.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" -L "$(LIBRARYD)" -L "$(LIBRARYS)" "$(SRC_INTERFACE)/main-gui.cpp" "$(BUILD_OBJ)/resources.o" $(LINK_GUI)
 
 clean:
 	# Cleaning build
-	-rm -r "$(BUILD_BIN)"
-	-rm -r "$(BUILD_OBJ)"
+	-rm -r $(BUILD)/*

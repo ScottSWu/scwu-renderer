@@ -1,0 +1,5 @@
+#define ID_ICON 11
+#define ID_MENU 12
+
+#define ID_MENU_FILE_OPEN 1211
+#define ID_MENU_FILE_EXIT 1212

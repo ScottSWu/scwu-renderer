@@ -154,6 +154,8 @@ GLFWAPI const char* glfwGetWin32Monitor(GLFWmonitor* monitor);
  *  @ingroup native
  */
 GLFWAPI HWND glfwGetWin32Window(GLFWwindow* window);
+
+GLFWAPI LRESULT CALLBACK glfwWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #endif
 
 #if defined(GLFW_EXPOSE_NATIVE_WGL)

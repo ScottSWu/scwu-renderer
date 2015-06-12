@@ -1,0 +1,10 @@
+#include "resources.h"
+
+ID_ICON ICON "res/Pineapple.ico"
+
+ID_MENU MENU {
+    POPUP "&File" {
+        MENUITEM "&Open", ID_MENU_FILE_OPEN
+        MENUITEM "&Exit", ID_MENU_FILE_EXIT
+    }
+}

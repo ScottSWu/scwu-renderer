@@ -1,17 +1,30 @@
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#define NOMINMAX
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <glm/glm.hpp>
+#include <tiny_obj_loader.h>
+
+#include <string>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <Windows.h>
+#include <iostream>
+
+#include <windows.h>
+#include <Commdlg.h>
 
 #include "Pineapple/Pineapple.hpp"
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Camera/PerspectiveCamera.hpp"
+#include "resources.h"
 
 #define PI 3.141592653f
 
+GLFWwindow * window;
 bool keys[512];
 double prevMouseX, prevMouseY;
 double scrollWheel;
@@ -51,7 +64,7 @@ static void handleInput(double duration, GLFWwindow * window, Camera * camera) {
     double dy = my - prevMouseY;
 
     // Rotation
-    mb = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    mb = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
     if (mb == GLFW_PRESS) {
         camera->rotate(dx, dy);
     }
@@ -93,9 +106,54 @@ static void handleInput(double duration, GLFWwindow * window, Camera * camera) {
     }
 }
 
-int main(void) {
+/**
+ * Handle windows input
+ */
+LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+    switch (msg) {
+        case WM_COMMAND:
+            switch (LOWORD(wparam)) {
+                case ID_MENU_FILE_OPEN:
+                    OPENFILENAME ofn;
+                    char filename[260];
+                    ZeroMemory( &ofn , sizeof(ofn));
+                    ofn.lStructSize = sizeof(ofn);
+                    ofn.hwndOwner = NULL;
+                    ofn.lpstrFile = filename;
+                    ofn.lpstrFile[0] = '\0';
+                    ofn.nMaxFile = sizeof(filename);
+                    ofn.lpstrFilter = "obj\0*.obj\0All\0*.*\0";
+                    ofn.nFilterIndex = 1;
+                    ofn.lpstrFileTitle = NULL;
+                    ofn.nMaxFileTitle = 0;
+                    ofn.lpstrInitialDir = NULL;
+                    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+                    if (GetOpenFileName(&ofn)) {
+                        std::vector<tinyobj::shape_t> shapes;
+                        std::vector<tinyobj::material_t> materials;
+                        std::string err = tinyobj::LoadObj(shapes, materials, filename);
+
+                        if (!err.empty()) {
+                            std::cout << err << std::endl;
+                        }
+                    }
+                    break;
+                case ID_MENU_FILE_EXIT:
+                    glfwSetWindowShouldClose(window, GL_TRUE);
+                    break;
+            }
+            break;
+        default:
+            return glfwWindowProc(hwnd, msg, wparam, lparam);
+    }
+
+    // Pass call to glfw
+    return DefWindowProc(hwnd, msg, wparam, lparam);
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     // Init GLFW
-    
     if (!glfwInit()) {
         printf("glfw failed to initialize.");
         exit(EXIT_FAILURE);
@@ -103,7 +161,7 @@ int main(void) {
     
     glfwSetErrorCallback(error_callback);
     
-    GLFWwindow * window = glfwCreateWindow(960, 540, "Pineapple Renderer", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Pineapple Renderer", NULL, NULL);
     
     if (!window) {
         printf("glfw window failed to initialize.");
@@ -111,17 +169,42 @@ int main(void) {
         exit(EXIT_FAILURE);
     }
     
+    // Some stuff
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
     glfwSetKeyCallback(window, key_callback);
     glfwSetScrollCallback(window, mousewheel_callback);
     
+    // Init glew
     if (glewInit() != GLEW_OK) {
         printf("glew failed to initialize.");
         exit(EXIT_FAILURE);
     }
     
+    // Init windows menu bars and stuff
+    WNDPROC hProc;
+    HWND hWindow;
+    HMENU hMenu;
+
+    hWindow = glfwGetWin32Window(window);
+    hProc = (WNDPROC) GetWindowLongPtr(hWindow, GWL_WNDPROC);
+    SetWindowLongPtr(hWindow, GWL_WNDPROC, (long) WinProc);
+
+    // Set menu
+    hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(ID_MENU));
+    SetMenu(hWindow, hMenu);
+
+    // Set icons
+    HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(ID_ICON));
+    if (hIcon) {
+        SendMessage(hWindow, WM_SETICON, ICON_BIG, (LPARAM) hIcon);
+    }
+    HICON hIconSm = (HICON) LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(ID_ICON), IMAGE_ICON, 16, 16, 0);
+    if (hIconSm) {
+        SendMessage(hWindow, WM_SETICON, ICON_SMALL, (LPARAM) hIconSm);
+    }
+
     // Renderer variables
     Camera * c = new PerspectiveCamera(640, 480, 0.1f, 100.f, 45.f);
     c->setTarget(0.f, 0.f, 0.f);
@@ -167,12 +250,10 @@ int main(void) {
         if (duration < targetRate) {
             lastTime = currTime;
         }
-        
         Sleep(16);
 
         if (currTime - lastFrame > 1.0) {
             printf("Frames per second: %d\n", frameCounter - lastFrameCount);
-            //printf("Camera: %f %f %f\n", x, y, z);
             lastFrameCount = frameCounter;
             lastFrame = currTime;
         }
