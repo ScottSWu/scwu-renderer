@@ -20,11 +20,14 @@
 #include "Pineapple/Pineapple.hpp"
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Camera/PerspectiveCamera.hpp"
+#include "Pineapple/Util/LoadObjFile.hpp"
 #include "resources.h"
 
 #define PI 3.141592653f
 
 GLFWwindow * window;
+Pineapple p;
+Scene * s;
 bool keys[512];
 double prevMouseX, prevMouseY;
 double scrollWheel;
@@ -116,31 +119,26 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                 case ID_MENU_FILE_OPEN:
                     OPENFILENAME ofn;
                     char filename[260];
+                    filename[0] = '\0';
                     ZeroMemory( &ofn , sizeof(ofn));
+
                     ofn.lStructSize = sizeof(ofn);
-                    ofn.hwndOwner = NULL;
+                    ofn.hwndOwner = hwnd;
+                    ofn.lpstrFilter = "*.obj\0*.obj\0All\0*.*\0";
                     ofn.lpstrFile = filename;
-                    ofn.lpstrFile[0] = '\0';
-                    ofn.nMaxFile = sizeof(filename);
-                    ofn.lpstrFilter = "obj\0*.obj\0All\0*.*\0";
                     ofn.nFilterIndex = 1;
-                    ofn.lpstrFileTitle = NULL;
-                    ofn.nMaxFileTitle = 0;
-                    ofn.lpstrInitialDir = NULL;
+                    ofn.nMaxFile = 260;
                     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
                     if (GetOpenFileName(&ofn)) {
-                        std::vector<tinyobj::shape_t> shapes;
-                        std::vector<tinyobj::material_t> materials;
-                        std::string err = tinyobj::LoadObj(shapes, materials, filename);
-
-                        if (!err.empty()) {
-                            std::cout << err << std::endl;
-                        }
+                        std::vector<Object3d *> objects = LoadObjFile(filename);
+                        s->addObject(objects[0]);
                     }
                     break;
                 case ID_MENU_FILE_EXIT:
                     glfwSetWindowShouldClose(window, GL_TRUE);
+                    break;
+                default:
                     break;
             }
             break;
@@ -209,8 +207,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Camera * c = new PerspectiveCamera(640, 480, 0.1f, 100.f, 45.f);
     c->setTarget(0.f, 0.f, 0.f);
     c->setPosition(4.f, 4.f, 4.f);
-    Pineapple p;
-    Scene * s = p.getScene();
+    s = p.getScene();
     s->camera = c;
     int width, height, newWidth, newHeight;
     float dummy[1];

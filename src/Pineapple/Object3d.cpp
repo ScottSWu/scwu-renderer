@@ -19,15 +19,15 @@ void Object3d::computeTransform(glm::mat4 parentTransform) {
     worldTransformIT = glm::inverseTranspose(worldTransform);
     
     for (int i = 0, l = children.size(); i < l; i++) {
-        children[i].computeTransform(worldTransform);
+        children[i]->computeTransform(worldTransform);
     }
 }
 
-void Object3d::addChild(const Object3d & object) {
+void Object3d::addChild(Object3d * object) {
     children.push_back(object);
 }
 
-void Object3d::removeChild(const Object3d & object) {
+void Object3d::removeChild(Object3d * object) {
     //children.erase(std::remove(children.begin(), children.end(), object), children.end());
     // TODO Implement custom object3d == operator
 }

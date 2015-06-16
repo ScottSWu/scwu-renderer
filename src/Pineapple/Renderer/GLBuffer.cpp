@@ -8,39 +8,53 @@
 
 #include <stdio.h>
 
-GLBuffer::GLBuffer(Mesh & m) {
+GLBuffer::GLBuffer() {
+    shaderIndex = 0;
+    positionBuffer = -1;
+    normalBuffer = -1;
+    uvBuffer = -1;
+    colorBuffer = -1;
+    indexBuffer = -1;
+    indexSize = 0;
+    mode = GL_LINES;
+}
+
+GLBuffer::GLBuffer(Mesh * m) {
+    // Default diffuse shader
+    shaderIndex = 0;
+
     // Fill buffers
-    int vertices = m.vertexCount;
-    int faces = m.faceCount;
+    int vertices = m->vertexCount;
+    int faces = m->faceCount;
 
     // Positions
     glGenBuffers(1, &positionBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec4), &(m.positions)[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec4), &(m->positions)[0], GL_STATIC_DRAW);
 
     // Normals
     glGenBuffers(1, &normalBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec4), &(m.normals)[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec4), &(m->normals)[0], GL_STATIC_DRAW);
     
     // UVs
     glGenBuffers(1, &uvBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec2), &(m.uvs)[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec2), &(m->uvs)[0], GL_STATIC_DRAW);
 
     // Colors
     glGenBuffers(1, &colorBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec4), &(m.colors)[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices * sizeof(glm::vec4), &(m->colors)[0], GL_STATIC_DRAW);
     
     // Assign indices
     glGenBuffers(1, &indexBuffer);
-    if (m.wireframe) { // Reindex vertices to work with GL_LINES
+    if (m->wireframe) { // Reindex vertices to work with GL_LINES
         std::vector<unsigned int> indices;
         
         glm::uvec3 index;
         for (int i = 0; i < faces; i++) {
-            index = m.faces[i];
+            index = m->faces[i];
             indices.push_back(index.x);
             indices.push_back(index.y);
             indices.push_back(index.y);
@@ -60,7 +74,7 @@ GLBuffer::GLBuffer(Mesh & m) {
         
         glm::uvec3 index;
         for (int i = 0; i < faces; i++) {
-            index = m.faces[i];
+            index = m->faces[i];
             indices.push_back(index.x);
             indices.push_back(index.y);
             indices.push_back(index.z);

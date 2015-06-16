@@ -26,11 +26,19 @@ class GLBuffer {
         GLuint colorBuffer;
     public:
         /**
+         * Initialize an empty GLBuffer
+         */
+        GLBuffer();
+
+        /**
          * Initialize a new GLBuffer with a given mesh.
          *
          * @param mesh  The mesh to generate from
          */
-        GLBuffer(Mesh &);
+        GLBuffer(Mesh *);
+
+        /** Attached shader index */
+        int shaderIndex;
 
         /**
          * Draw the GLBuffers to the current gl context.

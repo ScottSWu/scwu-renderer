@@ -9,13 +9,13 @@ out vec4 outPosition;
 out vec4 outNormal;
 out vec4 outColor;
 
-uniform mat4 mViewProjection;
+uniform mat4 mProjectionView;
 uniform mat4 mTransform;
 uniform mat4 mTransformIT;
 
 void main() {
     outPosition = mTransform * inPosition;
-    gl_Position = mViewProjection * outPosition;
+    gl_Position = mProjectionView * outPosition;
 
     outNormal = mTransformIT * normalize(inNormal);
     outColor = inColor;

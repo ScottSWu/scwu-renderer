@@ -1,6 +1,7 @@
 #ifndef _Pineapple_Renderer_GLRenderer
 #define _Pineapple_Renderer_GLRenderer
 
+#include <map>
 #include <vector>
 
 #include "Pineapple/Renderer.hpp"
@@ -16,17 +17,14 @@
  */
 class GLRenderer: public Renderer {
     protected:
-        /** Shader */
-        GLShader shader;
-        /** List of vertex buffers */
+        /** List of built-in buffers */
+        std::vector<GLBuffer> defaultBuffers;
+        /** List of mesh buffers */
         std::vector<GLBuffer> buffers;
-
-        /** Uniform location for the view projection matrix */
-        GLint mViewProjectionId;
-        /** Uniform location for the transformation matrix */
-        GLint mTransformId;
-        /** Uniform location for the inverse transpose matrix */
-        GLint mTransformITId;
+        /** List of shaders */
+        std::vector<GLShader> shaders;
+        /** Map of shaders */
+        std::map<std::string, int> shaderFiles;
 
         /** Whether or not gl stuff has been initialized */
         bool init;
@@ -35,12 +33,22 @@ class GLRenderer: public Renderer {
          *
          * @param scene     The scene to initialize with
          */
-        void initGL(Scene *);
+        void initGL();
+
+        /**
+         * Render a GLBuffer.
+         *
+         * @param buffer            The buffer to render
+         * @param lastShader        The index of the last shader used
+         * @param mProjection       The camera projection matrix
+         * @param mView             The camera view matrix
+         */
+        void renderBuffer(GLBuffer &, int &, glm::mat4 &, glm::mat4 &);
 
         /**
          * Generate vertex buffers for a list of objects and their children.
          */
-        void generateBuffers(std::vector<Object3d> &);
+        void generateBuffers(Object3d *);
     public:
         /**
          * Initialize a new OpenGL renderer.

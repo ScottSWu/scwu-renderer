@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <string>
+#include <map>
 
 /**
  * Defines an object in the scene.
@@ -29,9 +31,11 @@ class Object3d {
         glm::mat4 transform;
 
         /** List of children */
-        std::vector<Object3d> children;
+        std::vector<Object3d *> children;
         /** Indexed locations for multiple renderers */
         std::vector<int> rendererIndex;
+        /** Additional properties */
+        std::map<std::string, std::string> properties;
 
         /** Computed complete transformation matrix */
         glm::mat4 worldTransform;
@@ -50,13 +54,13 @@ class Object3d {
          *
          * @param object   Object to add
          */
-        void addChild(const Object3d &);
+        void addChild(Object3d *);
         /**
          * Remove a child object.
          *
          * @param object   Object to remove
          */
-        void removeChild(const Object3d &);
+        void removeChild(Object3d *);
 };
 
 #endif

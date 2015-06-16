@@ -97,6 +97,13 @@ void GLShader::load(std::string vertexFile, std::string fragmentFile) {
     
     glDeleteShader(vertexId);
     glDeleteShader(fragmentId);
+
+    // Get uniform locations
+    mProjectionViewId = glGetUniformLocation(programId, "mProjectionView");
+    mProjectionId = glGetUniformLocation(programId, "mProjection");
+    mViewId = glGetUniformLocation(programId, "mView");
+    mTransformId = glGetUniformLocation(programId, "mTransform");
+    mTransformITId = glGetUniformLocation(programId, "mTransformIT");
 }
 
 void GLShader::bind() {

@@ -21,6 +21,17 @@ class GLShader {
          */
         GLShader();
 
+        /** Uniform location for the projection view matrix */
+        GLint mProjectionViewId;
+        /** Uniform location for the projection matrix */
+        GLint mProjectionId;
+        /** Uniform location for the view matrix */
+        GLint mViewId;
+        /** Uniform location for the transformation matrix */
+        GLint mTransformId;
+        /** Uniform location for the inverse transpose matrix */
+        GLint mTransformITId;
+
         /**
          * Load vertex and fragment shader code by filename.
          *

@@ -17,7 +17,7 @@ Renderer::~Renderer() {
 }
 
 void Renderer::registerRenderer() {
-    rendererId = RENDERER_COUNT++;
+    rendererId = ++RENDERER_COUNT;
 }
 
 void Renderer::render(float imageBuffer[], Scene * scene) {

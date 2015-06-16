@@ -12,9 +12,9 @@
 class Scene {
     protected:
         /** List of objects in the scene */
-        std::vector<Object3d> objects;
+        std::vector<Object3d *> objects;
         /** List of lights in the scene */
-        std::vector<Light> lights;
+        std::vector<Light *> lights;
     public:
         /**
          * Initialize a new scene with a camera.
@@ -23,20 +23,6 @@ class Scene {
 
         /** Viewing camera */
         Camera * camera;
-
-        /**
-         * Return the scene's list of objects.
-         *
-         * @return  List of objects associated with this scene
-         */
-        std::vector<Object3d> & getObjects();
-
-        /**
-         * Return the scene's list of lights.
-         *
-         * @return  List of lgihts associated with this scene
-         */
-        std::vector<Light> & getLights();
 
         /**
          * Set the camera viewport size.
@@ -67,26 +53,26 @@ class Scene {
          *
          * @param object   The object to add
          */
-        void addObject(const Object3d &);
+        void addObject(Object3d *);
         /**
          * Remove an object from the scene.
          *
          * @param object   The object to remove
          */
-        void removeObject(const Object3d &);
+        void removeObject(Object3d *);
 
         /**
          * Add a light to the scene.
          *
          * @param light    The light to add
          */
-        void addLight(const Light &);
+        void addLight(Light *);
         /**
          * Remove a light from the scene.
          *
          * @param light    The light to remove
          */
-        void removeLight(const Light &);
+        void removeLight(Light *);
 };
 
 #endif
