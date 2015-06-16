@@ -8,7 +8,7 @@ out vec4 color;
 
 void main() {
     vec3 N = normalize(outNormal.xyz);
-    vec3 L = normalize(vec3(1.0, 1.0, 1.0));
+    vec3 L = normalize(vec3(2.0, 2.5, 1.5));
 
-    color = outColor;// * max(dot(N, L), 0.0);
+    color = outColor * max(dot(N, L), 0.0);
 }

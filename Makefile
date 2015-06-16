@@ -6,12 +6,11 @@ endef
 # Project
 NAME=Pineapple
 
-# Compilers
+# Programs
 CC=g++ -g -O0
 WR=windres
-
-# Archiver
 AR=ar
+FIND=$(shell where find | tr '\\' '/' | grep MinGW | head -n 1)
 
 # Locations
 BUILD=./build
@@ -27,7 +26,7 @@ BUILD_OBJ=$(BUILD)/obj
 SRC_INTERFACE=$(SRC)/Interface
 SRC_RENDERER=$(SRC)/$(NAME)
 
-SRC_RENDERER_SOURCES=$(shell find "$(SRC_RENDERER)" -name "*.cpp" -type f)
+SRC_RENDERER_SOURCES=$(shell $(FIND) "$(SRC_RENDERER)" -name "*.cpp" -type f)
 SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:.cpp=.o)))
 
 # Specific links

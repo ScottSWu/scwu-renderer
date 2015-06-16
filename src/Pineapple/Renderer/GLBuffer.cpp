@@ -8,21 +8,14 @@
 
 #include <stdio.h>
 
-GLBuffer::GLBuffer() {
-    shaderIndex = 0;
-    positionBuffer = -1;
-    normalBuffer = -1;
-    uvBuffer = -1;
-    colorBuffer = -1;
-    indexBuffer = -1;
-    indexSize = 0;
-    mode = GL_LINES;
+GLBuffer::GLBuffer() :
+        shaderIndex(0), positionBuffer(-1), normalBuffer(-1), uvBuffer(-1), colorBuffer(-1), indexBuffer(-1), indexSize(
+                0), mode(GL_LINES) {
+
 }
 
-GLBuffer::GLBuffer(Mesh * m) {
-    // Default diffuse shader
-    shaderIndex = 0;
-
+GLBuffer::GLBuffer(Mesh * m) :
+        shaderIndex(0) {
     // Fill buffers
     int vertices = m->vertexCount;
     int faces = m->faceCount;

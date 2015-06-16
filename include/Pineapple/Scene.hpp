@@ -11,6 +11,8 @@
 
 class Scene {
     protected:
+        /** Viewing camera */
+        Camera * camera;
         /** List of objects in the scene */
         std::vector<Object3d *> objects;
         /** List of lights in the scene */
@@ -21,9 +23,12 @@ class Scene {
          */
         Scene(Camera * inCamera = new OrthographicCamera(320, 320, -1.f, 1.f, 1.f, -1.f, 0.1, 100.f));
 
-        /** Viewing camera */
-        Camera * camera;
-
+        /**
+         * Set the camera object.
+         *
+         * @param camera    Camera object to set to
+         */
+        void setCamera(Camera *);
         /**
          * Set the camera viewport size.
          *
@@ -47,6 +52,27 @@ class Scene {
          * @param z    z coordinate
          */
         void setCameraTarget(float, float, float);
+
+        /**
+         * Return the current camera.
+         *
+         * @return  The current camera
+         */
+        Camera * getCamera();
+
+        /**
+         * Return a list of objects.
+         *
+         * @return  A vector copy of object pointers
+         */
+        std::vector<Object3d *> getObjects();
+
+        /**
+         * Return a list of lights.
+         *
+         * @return  A vector copy of light pointers
+         */
+        std::vector<Light *> getLights();
 
         /**
          * Add an object to the scene.

@@ -204,11 +204,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     // Renderer variables
-    Camera * c = new PerspectiveCamera(640, 480, 0.1f, 100.f, 45.f);
+    s = p.getScene();
+    Camera * c = new PerspectiveCamera(960, 540, 0.1f, 100.f, 45.f);
     c->setTarget(0.f, 0.f, 0.f);
     c->setPosition(4.f, 4.f, 4.f);
-    s = p.getScene();
-    s->camera = c;
+    s->setCamera(c);
+
     int width, height, newWidth, newHeight;
     float dummy[1];
     

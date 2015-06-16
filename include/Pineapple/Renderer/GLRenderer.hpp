@@ -17,8 +17,8 @@
  */
 class GLRenderer: public Renderer {
     protected:
-        /** List of built-in buffers */
-        std::vector<GLBuffer> defaultBuffers;
+        /** List of built-in meshes (grid, axes, background) */
+        std::vector<Mesh *> defaultMeshes;
         /** List of mesh buffers */
         std::vector<GLBuffer> buffers;
         /** List of shaders */
@@ -36,19 +36,31 @@ class GLRenderer: public Renderer {
         void initGL();
 
         /**
+         * Recursively render an object.
+         *
+         * @param object        The object to render
+         * @param lastShader    The index of the last shader used
+         * @param mProjection   The camera projection matrix
+         * @param mView         The camera view matrix
+         */
+        void renderObject(Object3d *, int &, glm::mat4 &, glm::mat4 &);
+
+        /**
          * Render a GLBuffer.
          *
-         * @param buffer            The buffer to render
-         * @param lastShader        The index of the last shader used
-         * @param mProjection       The camera projection matrix
-         * @param mView             The camera view matrix
+         * @param buffer        The buffer to render
+         * @param lastShader    The index of the last shader used
+         * @param mProjection   The camera projection matrix
+         * @param mView         The camera view matrix
          */
         void renderBuffer(GLBuffer &, int &, glm::mat4 &, glm::mat4 &);
 
         /**
-         * Generate vertex buffers for a list of objects and their children.
+         * Generate vertex buffer arrays for a mesh
+         *
+         * @param mesh  The mesh to generate buffers
          */
-        void generateBuffers(Object3d *);
+        void generateBuffer(Mesh *);
     public:
         /**
          * Initialize a new OpenGL renderer.

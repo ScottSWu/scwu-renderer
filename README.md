@@ -14,6 +14,7 @@ Layout:
 
 Currently using:
 - Windows API, may or may not try Qt
-- MinGW-g++ and MSYS-make, so effects of mkdir and rm may vary
-- Eclipse, which still seems to do different things with the make environment
-- A modified glfw3native header and library to expose its Windows callback function
+- A modified glfw3native header and library to expose its Windows callback function (see "include/GLFW/glfw3native.h" line 158)
+- MinGW-g++
+- Eclipse, which still seems to use sh and make. Effects of find, mkdir and rm may vary.
+	- I tried to resolve this by detecting the mingw "find" program
