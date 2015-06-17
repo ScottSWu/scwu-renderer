@@ -1,0 +1,9 @@
+mtllib sphere_em.mtl
+o SphereEnvironmentMap
+v -1.0 -1.0 1.0
+v  1.0 -1.0 1.0
+v  1.0  1.0 1.0
+v -1.0  1.0 1.0
+usemtl sphere_em_material
+s off
+f 1 2 3 4

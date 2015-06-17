@@ -1,0 +1,4 @@
+newmtl sphere_em_material
+vertex-shader ./res/SphericalEnvironment.vert
+fragment-shader ./res/SphericalEnvironment.frag
+texture0 ./obj/paulbourke.jpg

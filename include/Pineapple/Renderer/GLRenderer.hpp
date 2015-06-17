@@ -40,20 +40,22 @@ class GLRenderer: public Renderer {
          *
          * @param object        The object to render
          * @param lastShader    The index of the last shader used
+         * @param vViewport     The camera viewport information
          * @param mProjection   The camera projection matrix
          * @param mView         The camera view matrix
          */
-        void renderObject(Object3d *, int &, glm::mat4 &, glm::mat4 &);
+        void renderObject(Object3d *, int &, glm::vec3 &, glm::mat4 &, glm::mat4 &);
 
         /**
          * Render a GLBuffer.
          *
          * @param buffer        The buffer to render
          * @param lastShader    The index of the last shader used
+         * @param vViewport     The camera viewport information
          * @param mProjection   The camera projection matrix
          * @param mView         The camera view matrix
          */
-        void renderBuffer(GLBuffer &, int &, glm::mat4 &, glm::mat4 &);
+        void renderBuffer(GLBuffer &, int &, glm::vec3 &, glm::mat4 &, glm::mat4 &);
 
         /**
          * Generate vertex buffer arrays for a mesh

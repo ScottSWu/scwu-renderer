@@ -21,6 +21,8 @@ class GLShader {
          */
         GLShader();
 
+        /** Uniform location for viewport information (width, height, fov) */
+        GLint vViewportId;
         /** Uniform location for the projection view matrix */
         GLint mProjectionViewId;
         /** Uniform location for the projection matrix */
@@ -31,6 +33,15 @@ class GLShader {
         GLint mTransformId;
         /** Uniform location for the inverse transpose matrix */
         GLint mTransformITId;
+        /** Uniform location for textures */
+        GLint sTexture0Id;
+        GLint sTexture1Id;
+        GLint sTexture2Id;
+        GLint sTexture3Id;
+        GLint sTexture4Id;
+        GLint sTexture5Id;
+        GLint sTexture6Id;
+        GLint sTexture7Id;
 
         /**
          * Load vertex and fragment shader code by filename.

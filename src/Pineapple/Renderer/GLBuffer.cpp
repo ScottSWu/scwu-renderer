@@ -81,10 +81,16 @@ GLBuffer::GLBuffer(Mesh * m) :
     }
 }
 
-/**
- Draw the current buffers.
- */
+void GLBuffer::loadTexture(const char * filename) {
+    textureSet.load(filename, GL_RGB);
+}
+
+void GLBuffer::bind(const GLShader & shader) {
+    textureSet.bind(shader);
+}
+
 void GLBuffer::render() {
+    // Enable vertex arrays
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
@@ -101,9 +107,11 @@ void GLBuffer::render() {
     glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
+    // Draw
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glDrawElements(mode, indexSize, GL_UNSIGNED_INT, 0);
     
+    // Disable vertex arrays
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);

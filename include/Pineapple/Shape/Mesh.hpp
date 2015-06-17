@@ -46,12 +46,6 @@ class Mesh: public Surface {
          * Compute vertex and face normals.
          */
         void computeNormals();
-        /**
-         * Merge duplicate vertices together
-         *
-         * @param threshold    Distance threshold for merging
-         */
-        void mergeVertices(float);
 };
 
 #endif

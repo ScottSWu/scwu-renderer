@@ -2,11 +2,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include <iostream>
 #include <vector>
+#include <string>
 
 #include "Pineapple/Renderer/GLRenderer.hpp"
 #include "Pineapple/Object3D.hpp"
 #include "Pineapple/Camera.hpp"
+#include "Pineapple/Camera/PerspectiveCamera.hpp"
 #include "Pineapple/Renderer.hpp"
 #include "Pineapple/Renderer/GLShader.hpp"
 #include "Pineapple/Shape/Mesh.hpp"
@@ -31,10 +34,18 @@ void GLRenderer::render(float imageBuffer[], Scene * scene) {
     int width = camera->viewport.x;
     int height = camera->viewport.y;
     
+    PerspectiveCamera * pcamera = dynamic_cast<PerspectiveCamera *>(camera);
+    float fov = 45.f;
+    if (pcamera != 0) {
+        fov = pcamera->fov;
+    }
+
     float ratio = (float) width / (float) height;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, width, height);
     
     // Compute uniforms
+    glm::vec3 vViewport = glm::vec3(width, height, fov);
     glm::mat4 mProjection = camera->computeProjectionMatrix();
     glm::mat4 mView = camera->computeCameraMatrix();
     glm::mat4 mProjectionView = mProjection * mView;
@@ -43,6 +54,7 @@ void GLRenderer::render(float imageBuffer[], Scene * scene) {
     GLShader defaultShader = shaders[0];
     defaultShader.bind();
 
+    glUniform3fv(defaultShader.vViewportId, 1, &vViewport[0]);
     glUniformMatrix4fv(defaultShader.mProjectionViewId, 1, GL_FALSE, &mProjectionView[0][0]);
     glUniformMatrix4fv(defaultShader.mProjectionId, 1, GL_FALSE, &mProjection[0][0]);
     glUniformMatrix4fv(defaultShader.mViewId, 1, GL_FALSE, &mView[0][0]);
@@ -51,23 +63,21 @@ void GLRenderer::render(float imageBuffer[], Scene * scene) {
     // Render default objects
     int lastShader = 0;
     for (int i = 0, l = defaultMeshes.size(); i < l; i++) {
-        renderObject(defaultMeshes[i], lastShader, mProjection, mView);
-        //printf("%d\n", defaultMeshes[i]->rendererIndex[1]);
+        renderObject(defaultMeshes[i], lastShader, vViewport, mProjection, mView);
     }
     
     // Render scene objects
     std::vector<Object3d *> objects = scene->getObjects();
     for (int i = 0, l = objects.size(); i < l; i++) {
-        renderObject(objects[i], lastShader, mProjection, mView);
-        //printf("%d\n", objects[i]->rendererIndex[1]);
+        renderObject(objects[i], lastShader, vViewport, mProjection, mView);
     }
 
     shaders[lastShader].unbind();
 }
 
-void GLRenderer::renderObject(Object3d * object, int & lastShader, glm::mat4 & mProjection, glm::mat4 & mView) {
+void GLRenderer::renderObject(Object3d * object, int & lastShader, glm::vec3 & vViewport, glm::mat4 & mProjection, glm::mat4 & mView) {
     // Check if object is a mesh
-    Mesh * mesh = dynamic_cast<Mesh*>(object);
+    Mesh * mesh = dynamic_cast<Mesh *>(object);
     if (mesh != 0) {
         // Make indexing space if necessary
         while (mesh->rendererIndex.size() <= rendererId) {
@@ -81,15 +91,16 @@ void GLRenderer::renderObject(Object3d * object, int & lastShader, glm::mat4 & m
 
         // Render the buffer
         int bufferIndex = mesh->rendererIndex[rendererId];
-        renderBuffer(buffers[bufferIndex], lastShader, mProjection, mView);
+        renderBuffer(buffers[bufferIndex], lastShader, vViewport, mProjection, mView);
     }
 
     for (int i = 0, l = object->children.size(); i < l; i++) {
-        renderObject(object->children[i], lastShader, mProjection, mView);
+        renderObject(object->children[i], lastShader, vViewport, mProjection, mView);
     }
 }
 
-void GLRenderer::renderBuffer(GLBuffer & buffer, int & lastShader, glm::mat4 & mProjection, glm::mat4 & mView) {
+void GLRenderer::renderBuffer(GLBuffer & buffer, int & lastShader, glm::vec3 & vViewport, glm::mat4 & mProjection,
+        glm::mat4 & mView) {
     GLShader currentShader = shaders[lastShader];
     if (buffer.shaderIndex != lastShader) {
         // Bind new shader
@@ -98,6 +109,7 @@ void GLRenderer::renderBuffer(GLBuffer & buffer, int & lastShader, glm::mat4 & m
         currentShader.bind();
 
         glm::mat4 mProjectionView = mProjection * mView;
+        glUniform3fv(currentShader.vViewportId, 1, &vViewport[0]);
         glUniformMatrix4fv(currentShader.mProjectionViewId, 1, GL_FALSE, &mProjectionView[0][0]);
         glUniformMatrix4fv(currentShader.mProjectionId, 1, GL_FALSE, &mProjection[0][0]);
         glUniformMatrix4fv(currentShader.mViewId, 1, GL_FALSE, &mView[0][0]);
@@ -109,6 +121,7 @@ void GLRenderer::renderBuffer(GLBuffer & buffer, int & lastShader, glm::mat4 & m
     glUniformMatrix4fv(currentShader.mTransformId, 1, GL_FALSE, &mTransform[0][0]);
     glUniformMatrix4fv(currentShader.mTransformITId, 1, GL_FALSE, &mTransformIT[0][0]);
 
+    buffer.bind(currentShader);
     buffer.render();
 }
 
@@ -240,6 +253,21 @@ void GLRenderer::generateBuffer(Mesh * mesh) {
             // Use default shader
             shaders.push_back(shaders[0]);
             glb.shaderIndex = 0;
+        }
+
+        // Check for textures
+        std::map<std::string, std::string>::const_iterator searchTexture;
+        std::string tname;
+        for (char i = '0'; i < '8'; i++) {
+            tname = "texture";
+            tname += i;
+            searchTexture = mesh->properties.find(tname);
+            if (searchTexture != mesh->properties.end()) {
+                glb.loadTexture(searchTexture->second.c_str());
+            }
+            else {
+                break;
+            }
         }
 
         buffers.push_back(glb);

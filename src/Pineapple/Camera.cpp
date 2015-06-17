@@ -87,6 +87,38 @@ void Camera::zoom(float mx, float my) {
     position = target + diff;
 }
 
-void Camera::tilt(float mx, float my) {
+void Camera::move(float mx, float my) {
+    float factor = 1.f / 100.f;
+    mx *= factor;
+    my *= factor;
+
+    glm::vec3 forward = glm::normalize(target - position);
+    glm::vec3 right = glm::cross(forward, glm::vec3(0.f, 1.f, 0.f));
+
+    position += forward * mx + right * my;
+    target += forward * mx + right * my;
+}
+
+void Camera::look(float mx, float my) {
+    float factor = 1.f / 400.f;
+    mx *= factor;
+    my *= -factor;
+
+    glm::vec3 diff = target - position;
+    float theta = atan2(diff.z, diff.x) + mx;
+    float rxz = sqrt(diff.x * diff.x + diff.z * diff.z);
+    float phi = atan2(diff.y, rxz) + my;
+    float r = glm::length(diff);
+
+    if (phi > PI / 2.f - 0.01f) {
+        phi = PI / 2.f - 0.01f;
+    }
+    if (phi < -PI / 2.f + 0.01f) {
+        phi = -PI / 2.f + 0.01f;
+    }
     
+    diff.y = r * sin(phi);
+    diff.x = r * cos(phi) * cos(theta);
+    diff.z = r * cos(phi) * sin(theta);
+    target = position + diff;
 }

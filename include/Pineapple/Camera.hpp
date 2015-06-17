@@ -88,13 +88,21 @@ class Camera {
          * @param my    Mouse y movement
          */
         void zoom(float, float);
+
         /**
-         * Tilt the camera by the specified mouse movement.
+         * Move (fly) the camera by the specified mouse movement.
          *
          * @param mx    Mouse x movement
          * @param my    Mouse y movement
          */
-        void tilt(float, float);
+        void move(float, float);
+        /**
+         * Rotate (look around) the camera by the specified mouse movement.
+         *
+         * @param mx    Mouse x movement
+         * @param my    Mouse y movement
+         */
+        void look(float, float);
 };
 
 #endif

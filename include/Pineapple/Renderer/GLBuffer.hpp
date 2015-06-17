@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Pineapple/Shape/Mesh.hpp"
+#include "Pineapple/Renderer/GLTextureSet.hpp"
 
 /**
  * Defines vertex arrays and buffers for a mesh.
@@ -24,6 +25,8 @@ class GLBuffer {
         GLuint uvBuffer;
         /** Color buffer location */
         GLuint colorBuffer;
+        /** Associated textures */
+        GLTextureSet textureSet;
     public:
         /**
          * Initialize an empty GLBuffer
@@ -39,6 +42,20 @@ class GLBuffer {
 
         /** Attached shader index */
         int shaderIndex;
+
+        /**
+         * Load a texture associated to the buffer.
+         *
+         * @param filename  Image filename for the texture
+         */
+        void loadTexture(const char *);
+
+        /**
+         * Binds things to a shader.
+         *
+         * @param shader    GLShader to bind things to
+         */
+        void bind(const GLShader &);
 
         /**
          * Draw the GLBuffers to the current gl context.

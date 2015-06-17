@@ -1,9 +1,9 @@
 #include "Pineapple/Util/LoadObjFile.hpp"
 
-std::vector<Object3d*> LoadObjFile(char filename[]) {
+std::vector<Object3d *> LoadObjFile(char filename[], char foldername[]) {
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    std::string err = tinyobj::LoadObj(shapes, materials, filename, NULL);
+    std::string err = tinyobj::LoadObj(shapes, materials, filename, foldername);
 
     std::vector<Object3d *> objects;
 

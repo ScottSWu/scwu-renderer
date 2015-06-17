@@ -58,6 +58,18 @@ static void handleInput(double duration, GLFWwindow * window, Camera * camera) {
     if (keys[GLFW_KEY_PERIOD]) {
         camera->setTarget(0.f, 0.f, 0.f);
     }
+    if (keys[GLFW_KEY_W]) {
+        camera->move(5.f, 0.f);
+    }
+    if (keys[GLFW_KEY_S]) {
+        camera->move(-5.f, 0.f);
+    }
+    if (keys[GLFW_KEY_D]) {
+        camera->move(0.f, 5.f);
+    }
+    if (keys[GLFW_KEY_A]) {
+        camera->move(0.f, -5.f);
+    }
 
     // Mouse
     int mb;
@@ -76,6 +88,12 @@ static void handleInput(double duration, GLFWwindow * window, Camera * camera) {
     mb = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
     if (mb == GLFW_PRESS) {
         camera->translate(dx, dy);
+    }
+
+    // Move
+    mb = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    if (mb == GLFW_PRESS) {
+        camera->look(dx, dy);
     }
 
     prevMouseX = mx;
@@ -130,10 +148,29 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                     ofn.nMaxFile = 260;
                     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
+                    // Save current working directory
+                    TCHAR cwd[260];
+                    GetCurrentDirectory(260, cwd);
+
                     if (GetOpenFileName(&ofn)) {
-                        std::vector<Object3d *> objects = LoadObjFile(filename);
+                        char foldername[260];
+                        int len = 0;
+                        while (filename[len] != '\0') {
+                            foldername[len] = filename[len];
+                            len++;
+                        }
+                        foldername[len] = '\0';
+                        while (len >= 0 && foldername[len] != '\\') {
+                            foldername[len] = '\0';
+                            len--;
+                        }
+
+                        std::vector<Object3d *> objects = LoadObjFile(filename, foldername);
                         s->addObject(objects[0]);
                     }
+
+                    // Restore working directory
+                    SetCurrentDirectory(cwd);
                     break;
                 case ID_MENU_FILE_EXIT:
                     glfwSetWindowShouldClose(window, GL_TRUE);

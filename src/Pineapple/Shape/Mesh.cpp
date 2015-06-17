@@ -48,7 +48,3 @@ void Mesh::computeNormals() {
         normals[i] = glm::normalize(normals[i]);
     }
 }
-
-void Mesh::mergeVertices(float threshold) {
-    // TODO merge vertices
-}
