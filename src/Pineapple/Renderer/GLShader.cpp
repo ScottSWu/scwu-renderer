@@ -106,6 +106,8 @@ void GLShader::load(std::string vertexFile, std::string fragmentFile) {
 
     // Get uniform locations
     vViewportId = glGetUniformLocation(programId, "vViewport");
+    vCameraPositionId = glGetUniformLocation(programId, "vCameraPosition");
+    vCameraDirectionId = glGetUniformLocation(programId, "vCameraDirection");
     mProjectionViewId = glGetUniformLocation(programId, "mProjectionView");
     mProjectionId = glGetUniformLocation(programId, "mProjection");
     mViewId = glGetUniformLocation(programId, "mView");

@@ -1,11 +1,12 @@
 #version 330 core
 
+#define M_PI2 1.57079632679
 #define M_PI  3.14159265358
 #define M_2PI 6.28318530718
 
 uniform sampler2D sTexture0;
 
-in vec4 outPosition;
+in vec3 outPosition;
 
 out vec4 color;
 
@@ -16,9 +17,6 @@ void main() {
 	
 	theta = theta / M_2PI + 0.5;
 	phi = phi / M_PI + 0.5;
-	
-	if (theta<0) theta += 1.0;
-	if (phi<0) phi += 1.0;
 	
 	color = texture2D(sTexture0, vec2(theta, phi)).bgra;
 }

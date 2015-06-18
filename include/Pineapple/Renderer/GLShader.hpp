@@ -23,6 +23,10 @@ class GLShader {
 
         /** Uniform location for viewport information (width, height, fov) */
         GLint vViewportId;
+        /**  Uniform location for camera position */
+        GLint vCameraPositionId;
+        /**  Uniform location for camera direction */
+        GLint vCameraDirectionId;
         /** Uniform location for the projection view matrix */
         GLint mProjectionViewId;
         /** Uniform location for the projection matrix */

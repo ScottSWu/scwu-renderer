@@ -30,9 +30,9 @@ SRC_RENDERER_SOURCES=$(shell $(FIND) "$(SRC_RENDERER)" -name "*.cpp" -type f)
 SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:.cpp=.o)))
 
 # Specific links
-LINK_RENDERER=-lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lFreeImage -ltinyobjloader
+LINK_RENDERER=-lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lFreeImage
 LINK_CLI=-l$(NAME)
-LINK_GUI=-l$(NAME) -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -ltinyobjloader -lComdlg32 -lFreeImage
+LINK_GUI=-l$(NAME) -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lComdlg32 -lFreeImage
 
 all: Folders Resources $(NAME) Libraries cli gui
 	# Finished!
