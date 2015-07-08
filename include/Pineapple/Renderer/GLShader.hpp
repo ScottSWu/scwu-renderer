@@ -1,8 +1,15 @@
 #ifndef _Pineapple_Object_GLShader
 #define _Pineapple_Object_GLShader
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include <stdio.h>
+#include <sstream>
+#include <iostream>
+#include <vector>
 #include <string>
+#include <fstream>
 
 /**
  * Defines shader programs and their uniforms.
@@ -38,14 +45,13 @@ class GLShader {
         /** Uniform location for the inverse transpose matrix */
         GLint mTransformITId;
         /** Uniform location for textures */
-        GLint sTexture0Id;
-        GLint sTexture1Id;
-        GLint sTexture2Id;
-        GLint sTexture3Id;
-        GLint sTexture4Id;
-        GLint sTexture5Id;
-        GLint sTexture6Id;
-        GLint sTexture7Id;
+        GLint sTextureId[8];
+        /** Uniform location for number of lights */
+        GLint iLightCountId;
+        /** Uniform location for light positions */
+        GLint vLightPositionId;
+        /** Uniform location for light colors */
+        GLint vLightColorId;
 
         /**
          * Load vertex and fragment shader code by filename.

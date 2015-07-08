@@ -1,10 +1,14 @@
 #ifndef _Pineapple_Renderer_GLTextureSet
 #define _Pineapple_Renderer_GLTextureSet
 
-#include <GLFW/glfw3.h>
-#include <vector>
-
 #include "Pineapple/Renderer/GLShader.hpp"
+
+#define GLFW_INCLUDE_GLU
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include "FreeImage.h"
+
+#include <stdio.h>
 
 class GLTextureSet {
     protected:
@@ -18,10 +22,10 @@ class GLTextureSet {
         /**
          * Load an image texture.
          *
-         * @param filename  Image file path
+         * @param filename  Image data
          * @param format    Image format
          */
-        void load(const char *, GLenum);
+        void load(FIBITMAP *, GLenum);
 
         /**
          * Bind this texture to the current opengl context.

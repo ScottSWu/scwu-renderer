@@ -1,18 +1,13 @@
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <math.h>
-#include <stdio.h>
-
 #include "Pineapple/Camera.hpp"
 
 #define PI 3.141592653f
 
-Camera::Camera(int width, int height, float near, float far) :
+Camera::Camera(int inWidth, int inHeight, float inNear, float inFar) :
         target(0.f, 0.f, 1.f), up(0.f, 1.f, 0.f) {
-    viewport.x = width;
-    viewport.y = height;
-    planes.x = near;
-    planes.y = far;
+    viewport.x = inWidth;
+    viewport.y = inHeight;
+    planes.x = inNear;
+    planes.y = inFar;
 }
 
 Camera::~Camera() {
@@ -25,6 +20,13 @@ glm::mat4 Camera::computeCameraMatrix() {
 
 glm::mat4 Camera::computeProjectionMatrix() {
     glm::mat4 res;
+    return res;
+}
+
+Ray Camera::getRay(float x, float y) {
+    glm::vec3 origin;
+    glm::vec3 direction;
+    Ray res(origin, direction);
     return res;
 }
 

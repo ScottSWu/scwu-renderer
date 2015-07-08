@@ -1,16 +1,23 @@
 #ifndef _Pineapple_Renderer_GLRenderer
 #define _Pineapple_Renderer_GLRenderer
 
+#include "Pineapple/Renderer.hpp"
+
+class GLBuffer;
+class GLShader;
+class GLUniforms;
+class Mesh;
+class Object3d;
+
+#define GLFW_INCLUDE_GLU
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#include <iostream>
 #include <map>
 #include <vector>
-
-#include "Pineapple/Renderer.hpp"
-#include "Pineapple/Renderer/GLBuffer.hpp"
-#include "Pineapple/Renderer/GLShader.hpp"
-#include "Pineapple/Camera.hpp"
-#include "Pineapple/Light.hpp"
-#include "Pineapple/Object3d.hpp"
-#include "Pineapple/Scene.hpp"
+#include <string>
+#include <stdio.h>
 
 /**
  * Defines a renderer using opengl.
@@ -38,28 +45,20 @@ class GLRenderer: public Renderer {
         /**
          * Recursively render an object.
          *
-         * @param object            The object to render
-         * @param lastShader        The index of the last shader used
-         * @param vViewport         The camera viewport information
-         * @param vCameraPosition   The camera position vector
-         * @param vCameraDirection  The camera direction vector
-         * @param mProjection       The camera projection matrix
-         * @param mView             The camera view matrix
+         * @param object        The object to render
+         * @param lastShader    The index of the last shader used
+         * @param uniforms      The uniform values
          */
-        void renderObject(Object3d *, int &, glm::vec3 &, glm::vec3 &, glm::vec3 &, glm::mat4 &, glm::mat4 &);
+        void renderObject(Object3d *, int &, GLUniforms &);
 
         /**
          * Render a GLBuffer.
          *
          * @param buffer        The buffer to render
          * @param lastShader    The index of the last shader used
-         * @param vViewport     The camera viewport information
-         * @param vCameraPosition   The camera position vector
-         * @param vCameraDirection  The camera direction vector
-         * @param mProjection   The camera projection matrix
-         * @param mView         The camera view matrix
+         * @param uniforms      The uniform values
          */
-        void renderBuffer(GLBuffer &, int &, glm::vec3 &, glm::vec3 &, glm::vec3 &, glm::mat4 &, glm::mat4 &);
+        void renderBuffer(GLBuffer &, int &, GLUniforms &);
 
         /**
          * Generate vertex buffer arrays for a mesh
@@ -70,8 +69,10 @@ class GLRenderer: public Renderer {
     public:
         /**
          * Initialize a new OpenGL renderer.
+         *
+         * @param parameters   A map of extra parameters
          */
-        GLRenderer();
+        GLRenderer(std::map<std::string, std::string>);
 
         /**
          * Destructor

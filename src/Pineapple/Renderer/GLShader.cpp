@@ -1,18 +1,8 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <stdio.h>
-#include <sstream>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-
 #include "Pineapple/Renderer/GLShader.hpp"
 
-GLShader::GLShader() {
-    programId = 0;
-    vertexId = 0;
-    fragmentId = 0;
+GLShader::GLShader() :
+        programId(0), vertexId(0), fragmentId(0), vViewportId(0), vCameraPositionId(0), vCameraDirectionId(0), mProjectionViewId(
+                0), mProjectionId(0), mViewId(0), mTransformId(0), mTransformITId(0), iLightCountId(0) {
 }
 
 void GLShader::load(std::string vertexFile, std::string fragmentFile) {
@@ -113,14 +103,12 @@ void GLShader::load(std::string vertexFile, std::string fragmentFile) {
     mViewId = glGetUniformLocation(programId, "mView");
     mTransformId = glGetUniformLocation(programId, "mTransform");
     mTransformITId = glGetUniformLocation(programId, "mTransformIT");
-    sTexture0Id = glGetUniformLocation(programId, "sTexture0");
-    sTexture1Id = glGetUniformLocation(programId, "sTexture1");
-    sTexture2Id = glGetUniformLocation(programId, "sTexture2");
-    sTexture3Id = glGetUniformLocation(programId, "sTexture3");
-    sTexture4Id = glGetUniformLocation(programId, "sTexture4");
-    sTexture5Id = glGetUniformLocation(programId, "sTexture5");
-    sTexture6Id = glGetUniformLocation(programId, "sTexture6");
-    sTexture7Id = glGetUniformLocation(programId, "sTexture7");
+    for (char c = '0', i = 0; i < 8; i++, c++) {
+        sTextureId[i] = (glGetUniformLocation(programId, "sTexture" + c));
+    }
+    iLightCountId = glGetUniformLocation(programId, "iLightCount");
+    vLightPositionId = glGetUniformLocation(programId, "vLightPosition");
+    vLightColorId = glGetUniformLocation(programId, "vLightColor");
 
     printf("\tDone\n");
 }

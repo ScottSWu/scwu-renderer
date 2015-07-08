@@ -1,12 +1,4 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <vector>
-
 #include "Pineapple/Renderer/GLBuffer.hpp"
-#include "Pineapple/Shape/Mesh.hpp"
-
-#include <stdio.h>
 
 GLBuffer::GLBuffer() :
         shaderIndex(0), positionBuffer(-1), normalBuffer(-1), uvBuffer(-1), colorBuffer(-1), indexBuffer(-1), indexSize(
@@ -42,54 +34,37 @@ GLBuffer::GLBuffer(Mesh * m) :
     
     // Assign indices
     glGenBuffers(1, &indexBuffer);
-    if (m->wireframe) { // Reindex vertices to work with GL_LINES
-        std::vector<unsigned int> indices;
-        
-        glm::uvec3 index;
-        for (int i = 0; i < faces; i++) {
-            index = m->faces[i];
-            indices.push_back(index.x);
-            indices.push_back(index.y);
-            indices.push_back(index.y);
-            indices.push_back(index.z);
-            indices.push_back(index.z);
-            indices.push_back(index.x);
-        }
-        
-        indexSize = faces * 6;
-        mode = GL_LINES;
-        
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * sizeof(unsigned int), &(indices)[0], GL_STATIC_DRAW);
+    std::vector<unsigned int> indices;
+
+    glm::uvec3 index;
+    for (int i = 0; i < faces; i++) {
+        index = m->faces[i];
+        indices.push_back(index.x);
+        indices.push_back(index.y);
+        indices.push_back(index.z);
     }
-    else { // Usual given indices
-        std::vector<unsigned int> indices;
-        
-        glm::uvec3 index;
-        for (int i = 0; i < faces; i++) {
-            index = m->faces[i];
-            indices.push_back(index.x);
-            indices.push_back(index.y);
-            indices.push_back(index.z);
-        }
-        
-        indexSize = faces * 3;
-        mode = GL_TRIANGLES;
-        
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * sizeof(unsigned int), &(indices)[0], GL_STATIC_DRAW);
+
+    indexSize = faces * 3;
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * sizeof(unsigned int), &(indices)[0], GL_STATIC_DRAW);
+
+    if (m->wireframe) {
+        mode = GL_LINE;
+    }
+    else {
+        mode = GL_FILL;
     }
 }
 
-void GLBuffer::loadTexture(const char * filename) {
-    textureSet.load(filename, GL_RGB);
+void GLBuffer::loadTexture(FIBITMAP * image) {
+    textureSet.load(image, GL_RGB);
 }
 
 void GLBuffer::bind(const GLShader & shader) {
+    // Bind to the shader
     textureSet.bind(shader);
-}
 
-void GLBuffer::render() {
     // Enable vertex arrays
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
@@ -106,11 +81,16 @@ void GLBuffer::render() {
     glEnableVertexAttribArray(3);
     glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, 0);
+}
 
+void GLBuffer::render() {
     // Draw
+    glPolygonMode(GL_FRONT_AND_BACK, mode);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glDrawElements(mode, indexSize, GL_UNSIGNED_INT, 0);
-    
+    glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
+}
+
+void GLBuffer::unbind() {
     // Disable vertex arrays
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);

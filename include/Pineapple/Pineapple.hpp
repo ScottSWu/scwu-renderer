@@ -1,18 +1,23 @@
 #ifndef _Pineapple
 #define _Pineapple
 
+class Renderer;
+class Scene;
+
+#define GLFW_INCLUDE_GLU
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+
+#include <stdio.h>
 #include <map>
+#include <sstream>
 #include <string>
 #include <vector>
-
-#include "Pineapple/Scene.hpp"
-#include "Pineapple/Renderer.hpp"
-#include "Pineapple/Renderer/GLRenderer.hpp"
-#include "Pineapple/Camera.hpp"
+#include <algorithm>
 
 /**
- * Defines the interface for all renderers.
+ * Defines the interface for all renderers.*
  */
 class Pineapple {
     protected:
@@ -35,6 +40,14 @@ class Pineapple {
          * @return  A pointer to the current renderer
          */
         Renderer * getRenderer();
+        /**
+         * Set the current renderer given a number of parameters.
+         *
+         * @param params    String map of parameters
+         * @return  Whether or not the setting was successful
+         */
+        bool setRenderer(std::map<std::string, std::string>);
+
         /**
          * Return the current scene.
          *

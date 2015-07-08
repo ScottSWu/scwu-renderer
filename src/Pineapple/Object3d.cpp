@@ -1,8 +1,7 @@
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_inverse.hpp>
-#include <vector>
-
 #include "Pineapple/Object3d.hpp"
+
+#include "Pineapple/Intersection.hpp"
+#include "Pineapple/Ray.hpp"
 
 Object3d::Object3d() {
     visible = true;
@@ -30,4 +29,12 @@ void Object3d::addChild(Object3d * object) {
 void Object3d::removeChild(Object3d * object) {
     //children.erase(std::remove(children.begin(), children.end(), object), children.end());
     // TODO Implement custom object3d == operator
+}
+
+int Object3d::intersect(std::vector<Intersection> & results, const Ray & ray, bool recursive, int limit) {
+    if (recursive) {
+        for (int i = 0; i < children.size(); i++) {
+            children[i]->intersect(results, ray, recursive, limit);
+        }
+    }
 }

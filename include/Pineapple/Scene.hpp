@@ -1,20 +1,21 @@
 #ifndef _Pineapple_Scene
 #define _Pineapple_Scene
 
-#include <glm/glm.hpp>
-#include <vector>
-
 #include "Pineapple/Camera/OrthographicCamera.hpp"
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Object3d.hpp"
 #include "Pineapple/Light.hpp"
 
+#include <glm/glm.hpp>
+
+#include <vector>
+
 class Scene {
     protected:
         /** Viewing camera */
         Camera * camera;
-        /** List of objects in the scene */
-        std::vector<Object3d *> objects;
+        /** Root scene object */
+        Object3d * root;
         /** List of lights in the scene */
         std::vector<Light *> lights;
     public:
@@ -59,6 +60,13 @@ class Scene {
          * @return  The current camera
          */
         Camera * getCamera();
+
+        /**
+         * Return the root object.
+         *
+         * @return  The root object
+         */
+        Object3d * getRoot();
 
         /**
          * Return a list of objects.

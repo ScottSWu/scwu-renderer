@@ -1,10 +1,14 @@
 #ifndef _Pineapple_Object_GLBuffer
 #define _Pineapple_Object_GLBuffer
 
-#include <GLFW/glfw3.h>
-
 #include "Pineapple/Shape/Mesh.hpp"
 #include "Pineapple/Renderer/GLTextureSet.hpp"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+
+#include <vector>
 
 /**
  * Defines vertex arrays and buffers for a mesh.
@@ -46,9 +50,9 @@ class GLBuffer {
         /**
          * Load a texture associated to the buffer.
          *
-         * @param filename  Image filename for the texture
+         * @param filename  Image of the texture
          */
-        void loadTexture(const char *);
+        void loadTexture(FIBITMAP *);
 
         /**
          * Binds things to a shader.
@@ -56,6 +60,11 @@ class GLBuffer {
          * @param shader    GLShader to bind things to
          */
         void bind(const GLShader &);
+
+        /**
+         * Unbind things.
+         */
+        void unbind();
 
         /**
          * Draw the GLBuffers to the current gl context.

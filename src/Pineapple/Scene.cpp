@@ -2,6 +2,7 @@
 
 Scene::Scene(Camera * inCamera) {
     camera = inCamera;
+    root = new Object3d();
 }
 
 void Scene::setCamera(Camera * inCamera) {
@@ -24,8 +25,12 @@ Camera * Scene::getCamera() {
     return camera;
 }
 
+Object3d * Scene::getRoot() {
+    return root;
+}
+
 std::vector<Object3d *> Scene::getObjects() {
-    return objects;
+    return root->children;
 }
 
 std::vector<Light *> Scene::getLights() {
@@ -33,11 +38,11 @@ std::vector<Light *> Scene::getLights() {
 }
 
 void Scene::addObject(Object3d * object) {
-    objects.push_back(object);
+    root->addChild(object);
 }
 
 void Scene::removeObject(Object3d * object) {
-    // TODO Implement custom object3d == operator
+    root->removeChild(object);
 }
 
 void Scene::addLight(Light * light) {

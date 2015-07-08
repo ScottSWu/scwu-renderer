@@ -1,12 +1,14 @@
 #ifndef _Pineapple_Renderer
 #define _Pineapple_Renderer
 
-#include <vector>
-
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Light.hpp"
 #include "Pineapple/Object3d.hpp"
 #include "Pineapple/Scene.hpp"
+
+#include <map>
+#include <string>
+#include <vector>
 
 /**
  * Defines an arbitrary renderer.
@@ -29,8 +31,10 @@ class Renderer {
 
         /**
          * Initialize a new renderer.
+         *
+         * @param parameters   A map of extra parameters
          */
-        Renderer();
+        Renderer(std::map<std::string, std::string>);
 
         /**
          * Destructor

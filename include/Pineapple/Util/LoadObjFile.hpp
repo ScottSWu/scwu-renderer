@@ -1,14 +1,13 @@
 #ifndef _Pineapple_Util_LoadObj
 #define _Pineapple_Util_LoadObj
 
+class Object3d;
+
 #include <tiny_obj_loader.h>
 
 #include <vector>
 #include <string>
 #include <stdio.h>
-
-#include "Pineapple/Object3d.hpp"
-#include "Pineapple/Shape/Mesh.hpp"
 
 /**
  * Load an obj file

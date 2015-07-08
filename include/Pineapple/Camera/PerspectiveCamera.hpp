@@ -1,9 +1,12 @@
 #ifndef _Pineapple_Camera_Perspective
 #define _Pineapple_Camera_Perspective
 
-#include <glm/glm.hpp>
-
 #include "Pineapple/Camera.hpp"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <math.h>
 
 class PerspectiveCamera: public Camera {
     public:
@@ -26,6 +29,14 @@ class PerspectiveCamera: public Camera {
          * @return     4x4 projection matrix
          */
         glm::mat4 computeProjectionMatrix();
+
+        /**
+         * Compute a ray originating from the camera based on normalized screen coordinates.
+         *
+         * @param nx    Normalized x coordinate
+         * @param ny    Normalized y coordinate
+         */
+        Ray getRay(float, float);
 };
 
 #endif

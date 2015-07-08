@@ -2,9 +2,14 @@
 #define _Pineapple_Object3d
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+
 #include <vector>
 #include <string>
 #include <map>
+
+class Intersection;
+class Ray;
 
 /**
  * Defines an object in the scene.
@@ -61,6 +66,18 @@ class Object3d {
          * @param object   Object to remove
          */
         void removeChild(Object3d *);
+
+        /**
+         * Intersect a ray with this object.
+         *
+         * @param result        A vector of intersections
+         * @param ray           The ray to intersect with
+         * @param recursive     Whether or not to test children as well (default false)
+         * @param limit         Maximum number of intersections (default 0, no maximum)
+         * @return  The number of intersections recorded
+         */
+        virtual int intersect(std::vector<Intersection> & results, const Ray & ray, bool recursive = false,
+                int limit = 0);
 };
 
 #endif

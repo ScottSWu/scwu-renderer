@@ -1,9 +1,10 @@
 #ifndef _Pineapple_Camera_Orthographic
 #define _Pineapple_Camera_Orthographic
 
-#include <glm/glm.hpp>
-
 #include "Pineapple/Camera.hpp"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class OrthographicCamera: public Camera {
     public:
@@ -27,6 +28,14 @@ class OrthographicCamera: public Camera {
          * @return     4x4 projection matrix
          */
         glm::mat4 computeProjectionMatrix();
+
+        /**
+         * Compute a ray in the direction of projection based on normalized screen coordinates.
+         *
+         * @param nx    Normalized x coordinate
+         * @param ny    Normalized y coordinate
+         */
+        Ray getRay(float, float);
 };
 
 #endif

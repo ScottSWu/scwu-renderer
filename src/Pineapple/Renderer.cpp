@@ -1,13 +1,8 @@
-#include <vector>
-
-#include "Pineapple/Camera.hpp"
-#include "Pineapple/Light.hpp"
-#include "Pineapple/Object3d.hpp"
 #include "Pineapple/Renderer.hpp"
 
 int Renderer::RENDERER_COUNT = 0;
 
-Renderer::Renderer() {
+Renderer::Renderer(std::map<std::string, std::string>) {
     rendererId = -1;
     registerRenderer();
 }

@@ -1,7 +1,13 @@
 #ifndef _Pineapple_Camera
 #define _Pineapple_Camera
 
+#include "Pineapple/Ray.hpp"
+
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
+
+#include <math.h>
+#include <stdio.h>
 
 /**
  * Defines a camera.
@@ -11,7 +17,7 @@ class Camera {
         /**
          * Initialize a default camera.
          */
-        Camera(int width = 320, int height = 320, float near = 0.1f, float far = 100.f);
+        Camera(int inWidth = 320, int inHeight = 320, float inNear = 0.1f, float inFar = 100.f);
 
         /**
          * Destructor
@@ -42,6 +48,14 @@ class Camera {
          * @return     4x4 projection matrix
          */
         virtual glm::mat4 computeProjectionMatrix();
+
+        /**
+         * Compute a ray originating from the camera based on normalized screen coordinates.
+         *
+         * @param nx    Normalized x coordinate
+         * @param ny    Normalized y coordinate
+         */
+        virtual Ray getRay(float, float);
 
         /**
          * Set the viewport size.

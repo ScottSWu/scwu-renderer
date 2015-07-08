@@ -7,4 +7,10 @@ ID_MENU MENU {
         MENUITEM "&Open", ID_MENU_FILE_OPEN
         MENUITEM "&Exit", ID_MENU_FILE_EXIT
     }
+    
+    POPUP "&Render" {
+    	MENUITEM "OpenGL", ID_MENU_RENDER_OPENGL
+    	MENUITEM "Depth", ID_MENU_RENDER_DEPTH
+    	MENUITEM "Color", ID_MENU_RENDER_COLOR
+    }
 }
