@@ -38,6 +38,13 @@ class Scene {
          */
         void setCameraViewport(int, int);
         /**
+         * Set the camera near and far planes.
+         *
+         * @param near      Near plane
+         * @param far       Far plane
+         */
+        void setCameraPlanes(float, float);
+        /**
          * Set the camera position.
          *
          * @param x    x coordinate
@@ -107,6 +114,23 @@ class Scene {
          * @param light    The light to remove
          */
         void removeLight(Light *);
+        /**
+         * Remove all lights from the scene.
+         */
+        void removeAllLights();
+
+        /**
+         * Pass through function to root object.
+         *
+         * @param parentTransform   Transformation matrix of the parent object
+         */
+        void computeTransform();
+        /**
+         * Pass through function to root object.
+         *
+         * @param recursive     Whether or not to recurse
+         */
+        void computeBoundingBox(bool recursive = true);
 };
 
 #endif

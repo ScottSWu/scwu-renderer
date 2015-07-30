@@ -8,6 +8,8 @@
 
 #include <math.h>
 
+#include "Pineapple/Globals.hpp"
+
 class PerspectiveCamera: public Camera {
     public:
         /**

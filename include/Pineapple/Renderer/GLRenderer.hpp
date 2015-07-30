@@ -34,7 +34,7 @@ class GLRenderer: public Renderer {
         std::map<std::string, int> shaderFiles;
 
         /** Whether or not gl stuff has been initialized */
-        bool init;
+        bool initialized;
         /**
          * Initialize on the first call to render() for gl context.
          *
@@ -54,11 +54,12 @@ class GLRenderer: public Renderer {
         /**
          * Render a GLBuffer.
          *
+         * @param object        The object whose buffer is to be rendered
          * @param buffer        The buffer to render
          * @param lastShader    The index of the last shader used
          * @param uniforms      The uniform values
          */
-        void renderBuffer(GLBuffer &, int &, GLUniforms &);
+        void renderBuffer(Object3d *, GLBuffer &, int &, GLUniforms &);
 
         /**
          * Generate vertex buffer arrays for a mesh
@@ -80,12 +81,11 @@ class GLRenderer: public Renderer {
         ~GLRenderer();
 
         /**
-         * Renders an image to the current gl context.
+         * Render the task.
          *
-         * @param imageBuffer   Dummy variable for compatibility
-         * @param scene         Scene to render
+         * @param task      Task to render
          */
-        void render(float[], Scene *);
+        void render(RenderTask *);
 };
 
 #endif

@@ -12,7 +12,14 @@ class SurfaceIntegrator;
 
 class Raycaster: public Renderer {
     private:
+        /**
+         * List of integrators to use.
+         */
         std::vector<SurfaceIntegrator *> integrators;
+        /**
+         * Number of samples.
+         */
+        int samples;
     public:
         /**
          * Initialize a new raycasting renderer.
@@ -27,12 +34,40 @@ class Raycaster: public Renderer {
         ~Raycaster();
 
         /**
-         * Renders an image to the current gl context.
+         * Set the current rendering targets.
          *
-         * @param imageBuffer   Render target image buffer
-         * @param scene         Scene to render
+         * @param buffer    The buffer to render to
+         * @param scene     The scene to render
          */
-        void render(float[], Scene *);
+        void init(RenderBuffer *, Scene *);
+
+        /**
+         * Render the task.
+         *
+         * @param task      Task to render
+         */
+        void render(RenderTask *);
+
+        /**
+         * Process a task result.
+         *
+         * @param task      Task to process
+         */
+        void process(RenderTask *);
+
+        /**
+         * Returns whether there are more tasks.
+         *
+         * @return      Whether or not there are more tasks
+         */
+        bool hasTask();
+
+        /**
+         * Returns the next task.
+         *
+         * @return      An unfinished task
+         */
+        RenderTask * getTask();
 };
 
 #endif

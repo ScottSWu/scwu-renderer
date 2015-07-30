@@ -1,6 +1,7 @@
 #ifndef _Pineapple_Shape_Mesh
 #define _Pineapple_Shape_Mesh
 
+#include "Pineapple/Accel.hpp"
 #include "Pineapple/Shape/Surface.hpp"
 #include "Pineapple/Material.hpp"
 
@@ -9,11 +10,27 @@ class Ray;
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <stack>
 
 /**
  * Defines a triangle mesh.
  */
 class Mesh: public Surface {
+    protected:
+        /**
+         * Bounding structure needs update.
+         */
+        bool boundsNeedsUpdate;
+
+        /**
+         * Acceleration structure used by the mesh.
+         */
+        Accel * accelStructure;
+
+        /**
+         * Generate an acceleration structure
+         */
+        Accel * generateAccelStructure(const std::vector<int> &);
     public:
         /**
          * Initialize a mesh with a given material.
@@ -53,17 +70,43 @@ class Mesh: public Surface {
         void computeNormals();
 
         /**
-         * Compute the bounding box of the mesh.
-         */
-        BoundingBox computeBoundingBox();
-
-        /**
-         * Sample a color from this mesh.
+         * Sample a position from this mesh.
          *
          * @param index     Triangle indices on the mesh.
          * @param coord     Barycentric coordinate of the triangle.
          */
-        glm::vec4 sampleColor(glm::uvec3, glm::vec3);
+        glm::vec4 samplePosition(const glm::uvec3 &, const glm::vec3 &);
+
+        /**
+         * Sample a normal from this mesh.
+         *
+         * @param index     Triangle indices on the mesh.
+         * @param coord     Barycentric coordinate of the triangle.
+         */
+        glm::vec4 sampleNormal(const glm::uvec3 &, const glm::vec3 &);
+
+        /**
+         * Sample a uv from this mesh.
+         *
+         * @param index     Triangle indices on the mesh.
+         * @param coord     Barycentric coordinate of the triangle.
+         */
+        glm::vec2 sampleUV(const glm::uvec3 &, const glm::vec3 &);
+
+        /**
+         * Sample a color from this mesh. (Passes through to material textures)
+         *
+         * @param index     Triangle indices on the mesh.
+         * @param coord     Barycentric coordinate of the triangle.
+         */
+        glm::vec4 sampleColor(const glm::uvec3 &, const glm::vec3 &);
+
+        /**
+         * Compute the local bounding box of this object.
+         *
+         * @param recursive     Whether or not to compute the bounding box of children as well.
+         */
+        BoundingBox computeBoundingBox(bool recursive = true);
 
         /**
          * Intersect a ray with this mesh.

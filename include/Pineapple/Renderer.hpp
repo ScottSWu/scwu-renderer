@@ -1,12 +1,13 @@
 #ifndef _Pineapple_Renderer
 #define _Pineapple_Renderer
 
-#include "Pineapple/Camera.hpp"
-#include "Pineapple/Light.hpp"
-#include "Pineapple/Object3d.hpp"
-#include "Pineapple/Scene.hpp"
+class Camera;
+class RenderBuffer;
+class RenderTask;
+class Scene;
 
 #include <map>
+#include <queue>
 #include <string>
 #include <vector>
 
@@ -23,6 +24,30 @@ class Renderer {
          * Assign this renderer an id to store in objects.
          */
         void registerRenderer();
+        /**
+         * The current buffer to render to.
+         */
+        RenderBuffer * currentBuffer;
+        /**
+         * The current scene to render.
+         */
+        Scene * currentScene;
+        /**
+         * The current camera to render from.
+         */
+        Camera * currentCamera;
+        /**
+         * The width of the render result.
+         */
+        int width;
+        /**
+         * The height of the render result.
+         */
+        int height;
+        /**
+         * List of tasks to distribute.
+         */
+        std::queue<RenderTask *> tasks;
     public:
         /**
          * Count of registered renderers
@@ -42,13 +67,40 @@ class Renderer {
         virtual ~Renderer();
 
         /**
-         * Render the image to a float array.
-         * The size of the given array must be greater than 4 * width * height.
+         * Set the current rendering targets.
          *
-         * @param imageBuffer  Float array to render to
-         * @param scene        Scene to render
+         * @param buffer    The buffer to render to
+         * @param scene     The scene to render
          */
-        virtual void render(float[], Scene *);
+        virtual void init(RenderBuffer *, Scene *);
+
+        /**
+         * Render the task.
+         *
+         * @param task      Task to render
+         */
+        virtual void render(RenderTask *);
+
+        /**
+         * Process a task result.
+         *
+         * @param task      Task to process
+         */
+        virtual void process(RenderTask *);
+
+        /**
+         * Returns whether there are more tasks.
+         *
+         * @return      Whether or not there are more tasks
+         */
+        virtual bool hasTask();
+
+        /**
+         * Returns the next task.
+         *
+         * @return      An unfinished task
+         */
+        virtual RenderTask * getTask();
 };
 
 #endif

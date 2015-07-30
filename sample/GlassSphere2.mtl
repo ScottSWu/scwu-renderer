@@ -1,0 +1,16 @@
+# Blender MTL File: 'CornellBox-glass.blend'
+# Material Count: 7
+
+newmtl Refl
+	type glass
+	tMix -1.0
+	rMix 1.0
+	cMix -1.0
+	color 1.0 1.0 1.0
+
+newmtl Refr
+	type glass
+	tMix 1.0
+	rMix -1.0
+	cMix -1.0
+	color 1.0 1.0 1.0

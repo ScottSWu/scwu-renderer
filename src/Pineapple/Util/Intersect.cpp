@@ -10,18 +10,18 @@ bool IntersectTriangle(glm::vec4 & result, const Ray & ray, const glm::vec4 & v0
     glm::vec3 n(glm::normalize(glm::cross(u, v)));
 
     // Ray - plane intersection
-    glm::vec3 o(glm::vec3(v0) - ray.origin);
-    float t = glm::dot(n, o) / glm::dot(n, ray.direction);
+    glm::vec3 o(glm::vec3(v0) - ray.origin3);
+    float t = glm::dot(n, o) / glm::dot(n, ray.direction3);
 
     if (std::isnan(t) || t < 0) {
         return false;
     }
-    if (t < ray.limits.x && t > ray.limits.y) {
+    if (t < ray.limits.x || t > ray.limits.y) {
         return false;
     }
 
     // Intersection point
-    glm::vec3 p(ray.origin + ray.direction * t);
+    glm::vec3 p(ray.origin3 + ray.direction3 * t);
     // On-plane vector
     glm::vec3 l(p - glm::vec3(v0));
 

@@ -31,6 +31,6 @@ Ray OrthographicCamera::getRay(float x, float y) {
 
     glm::vec3 direction = nx * right + ny * up;
 
-    Ray res(position + direction, forward);
+    Ray res(0, position + direction, forward);
     return res;
 }

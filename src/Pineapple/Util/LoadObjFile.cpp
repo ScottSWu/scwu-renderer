@@ -4,7 +4,7 @@
 #include "Pineapple/Shape/Mesh.hpp"
 #include "Pineapple/Material.hpp"
 
-std::vector<Object3d *> LoadObjFile(char filename[], char foldername[]) {
+std::vector<Object3d *> LoadObjFile(const char * filename, const char * foldername) {
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string err = tinyobj::LoadObj(shapes, materials, filename, foldername);
@@ -16,9 +16,28 @@ std::vector<Object3d *> LoadObjFile(char filename[], char foldername[]) {
     }
     else {
         for (int i = 0, l = shapes.size(); i < l; i++) {
-            Mesh * m = new Mesh();
-            Material * mat = m->material;
             tinyobj::mesh_t shape = shapes[i].mesh;
+            Mesh * m;
+            Material * mat;
+
+            // Assume one material
+            // TODO Multiple materials (?)
+            if (shape.material_ids.size() > 0 && shape.material_ids[0] < materials.size()) {
+                std::map<std::string, std::string> parameters = materials[shape.material_ids[0]].unknown_parameter;
+                if (parameters.find("type") != parameters.end()) {
+                    std::string type = parameters["type"];
+
+                    mat = Material::getMaterial(type, parameters);
+                }
+                else { // Otherwise use a default material
+                    mat = new Material(parameters);
+                }
+            }
+            else {
+                // Default material will be used
+                mat = new Material();
+            }
+            m = new Mesh(mat);
 
             int indices = shape.indices.size();
             if (indices % 3 != 0) {
@@ -53,17 +72,6 @@ std::vector<Object3d *> LoadObjFile(char filename[], char foldername[]) {
             }
             for (int j = 0; j < uvs; j += 2) {
                 m->uvs.push_back(glm::vec2(shape.texcoords[j], shape.texcoords[j + 1]));
-            }
-
-            // Additional material properties
-            int ids = shape.material_ids.size();
-            for (int j = 0; j < ids; j++) {
-                std::map<std::string, std::string> parameters = materials[shape.material_ids[j]].unknown_parameter;
-                std::map<std::string, std::string>::const_iterator itr;
-                std::map<std::string, std::string>::const_iterator itrEnd;
-                for (itr = parameters.begin(), itrEnd = parameters.end(); itr != itrEnd; itr++) {
-                    mat->properties[itr->first.c_str()] = itr->second.c_str();
-                }
             }
 
             m->fillDefault();

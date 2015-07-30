@@ -1,0 +1,9 @@
+# Blender MTL File: 'Glass'
+# Material Count: 1
+
+newmtl Glass
+type glass
+tMix -1.0
+rMix 0.6
+cMix 0.4
+color 1.0 1.0 1.0

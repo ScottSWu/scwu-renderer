@@ -1,7 +1,0 @@
-# Blender MTL File: 'None'
-# Material Count: 1
-
-newmtl TextureMaterial
-vertex-shader	./res/TextureTest.vert
-fragment-shader	./res/TextureTest.frag
-texture0	./obj/TextureTest.png

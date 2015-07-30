@@ -2,9 +2,9 @@
 
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Camera/PerspectiveCamera.hpp"
-#include "Pineapple/Camera.hpp"
 #include "Pineapple/Light.hpp"
 #include "Pineapple/Object3d.hpp"
+#include "Pineapple/RenderTask.hpp"
 #include "Pineapple/Renderer/GLBuffer.hpp"
 #include "Pineapple/Renderer/GLShader.hpp"
 #include "Pineapple/Renderer/GLUniforms.hpp"
@@ -12,22 +12,21 @@
 #include "Pineapple/Shape/Mesh.hpp"
 
 GLRenderer::GLRenderer(std::map<std::string, std::string> parameters) :
-        Renderer(parameters) {
-    init = false;
+        Renderer(parameters), initialized(false) {
+
 }
 
 GLRenderer::~GLRenderer() {
     
 }
 
-bool _tmp_first = true;
-void GLRenderer::render(float imageBuffer[], Scene * scene) {
-    if (!init) {
+void GLRenderer::render(RenderTask * task) {
+    if (!initialized) {
         initGL();
     }
     
-    Camera * camera = scene->getCamera();
-    
+    Camera * camera = currentScene->getCamera();
+
     int width = camera->viewport.x;
     int height = camera->viewport.y;
 
@@ -36,7 +35,7 @@ void GLRenderer::render(float imageBuffer[], Scene * scene) {
     glViewport(0, 0, width, height);
     
     // Compute uniforms
-    GLUniforms uniforms(scene, camera);
+    GLUniforms uniforms(currentScene, camera);
 
     // Use the default shader
     GLShader defaultShader = shaders[0];
@@ -50,8 +49,10 @@ void GLRenderer::render(float imageBuffer[], Scene * scene) {
         renderObject(defaultMeshes[i], lastShader, uniforms);
     }
     
+    // Compute transforms
+    currentScene->computeTransform();
     // Render scene objects
-    std::vector<Object3d *> objects = scene->getObjects();
+    std::vector<Object3d *> objects = currentScene->getObjects();
     for (int i = 0, l = objects.size(); i < l; i++) {
         renderObject(objects[i], lastShader, uniforms);
     }
@@ -75,7 +76,7 @@ void GLRenderer::renderObject(Object3d * object, int & lastShader, GLUniforms & 
 
         // Render the buffer
         int bufferIndex = mesh->rendererIndex[rendererId];
-        renderBuffer(buffers[bufferIndex], lastShader, uniforms);
+        renderBuffer(object, buffers[bufferIndex], lastShader, uniforms);
     }
 
     for (int i = 0, l = object->children.size(); i < l; i++) {
@@ -83,7 +84,7 @@ void GLRenderer::renderObject(Object3d * object, int & lastShader, GLUniforms & 
     }
 }
 
-void GLRenderer::renderBuffer(GLBuffer & buffer, int & lastShader, GLUniforms & uniforms) {
+void GLRenderer::renderBuffer(Object3d * object, GLBuffer & buffer, int & lastShader, GLUniforms & uniforms) {
     GLShader currentShader = shaders[lastShader];
     if (buffer.shaderIndex != lastShader) {
         // Bind new shader
@@ -95,9 +96,9 @@ void GLRenderer::renderBuffer(GLBuffer & buffer, int & lastShader, GLUniforms & 
 
         lastShader = buffer.shaderIndex;
     }
-    // TODO Compute and use object matrix transforms
-    glm::mat4 mTransform;
-    glm::mat4 mTransformIT;
+
+    glm::mat4 mTransform = object->worldTransform;
+    glm::mat4 mTransformIT = object->worldTransformIT;
     glUniformMatrix4fv(currentShader.mTransformId, 1, GL_FALSE, &mTransform[0][0]);
     glUniformMatrix4fv(currentShader.mTransformITId, 1, GL_FALSE, &mTransformIT[0][0]);
 
@@ -108,7 +109,7 @@ void GLRenderer::renderBuffer(GLBuffer & buffer, int & lastShader, GLUniforms & 
 
 void GLRenderer::initGL() {
     // Background color
-    glClearColor(0.f, 0.f, 0.5f, 1.f);
+    glClearColor(0.f, 0.f, 0.0f, 1.f);
     glEnable(GL_DEPTH_TEST);
     
     // Shader program and uniforms
@@ -190,7 +191,7 @@ void GLRenderer::initGL() {
 
     // ================ END TEST ================
 
-    init = true;
+    initialized = true;
 }
 
 void GLRenderer::generateBuffer(Mesh * mesh) {

@@ -1,0 +1,7 @@
+# Blender MTL File: 'HugoSimp.blend'
+
+newmtl HugoMat
+vertex-shader	./res/DiffuseTexture.vert
+fragment-shader	./res/DiffuseTexture.frag
+texture0	./sample/HugoTexture.png
+type diffuse

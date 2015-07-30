@@ -1,0 +1,59 @@
+{
+	"camera": {
+		"width": 960,
+		"height": 540,
+		"type": "perspective",
+		"fov": 90,
+		"position": [ 4, 4, 4 ]
+	},
+	
+	"lights": [
+		{
+			"type": "point",
+			"position": [ -1, 2, 4 ],
+			"intensity": 4
+		},
+		{
+			"type": "point",
+			"position": [ -1, 2, -1 ],
+			"intensity": 4
+		},
+		{
+			"type": "point",
+			"position": [ 4, 2, 4 ],
+			"intensity": 4
+		},
+		{
+			"type": "point",
+			"position": [ 4, 2, -1 ],
+			"intensity": 4
+		}
+	],
+	
+	"children": [
+		{
+			"type": "mesh",
+			"file": "./sample/HugoSimple.obj",
+			"position": [ 2.5, 0, 2.5 ],
+			"scale": [ 0.5, 0.5, 0.5 ]
+		},
+		{
+			"type": "mesh",
+			"file": "./sample/HugoSimple.obj",
+			"position": [ 2.5, 0, -2.5 ],
+			"scale": [ 0.5, 0.5, 0.5 ]
+		},
+		{
+			"type": "mesh",
+			"file": "./sample/HugoSimple.obj",
+			"position": [ -2.5, 0, -2.5 ],
+			"scale": [ 0.5, 0.5, 0.5 ]
+		},
+		{
+			"type": "mesh",
+			"file": "./sample/HugoSimple.obj",
+			"position": [ -2.5, 0, 2.5 ],
+			"scale": [ 0.5, 0.5, 0.5 ]
+		}
+	]
+}

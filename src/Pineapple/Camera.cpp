@@ -26,7 +26,7 @@ glm::mat4 Camera::computeProjectionMatrix() {
 Ray Camera::getRay(float x, float y) {
     glm::vec3 origin;
     glm::vec3 direction;
-    Ray res(origin, direction);
+    Ray res(0, origin, direction);
     return res;
 }
 

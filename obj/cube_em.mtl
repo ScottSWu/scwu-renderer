@@ -1,9 +1,0 @@
-newmtl cube_em_material
-vertex-shader ./res/CubeEnvironment.vert
-fragment-shader ./res/CubeEnvironment.frag
-texture0 ./obj/paulbourke_r_pano.jpg
-texture1 ./obj/paulbourke_l_pano.jpg
-texture2 ./obj/paulbourke_t_pano.jpg
-texture3 ./obj/paulbourke_d_pano.jpg
-texture4 ./obj/paulbourke_f_pano.jpg
-texture5 ./obj/paulbourke_b_pano.jpg

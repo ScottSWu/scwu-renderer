@@ -12,9 +12,10 @@ class Object3d;
 /**
  * Load an obj file
  *
- * @param filename  Path to the file
+ * @param filename      Path to the file
+ * @param foldername    Path to the folder containing the file
  */
-std::vector<Object3d *> LoadObjFile(char filename[], char foldername[] = NULL);
+std::vector<Object3d *> LoadObjFile(const char * filename, const char * foldername = NULL);
 
 #endif
 

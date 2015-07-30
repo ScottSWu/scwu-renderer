@@ -1,8 +1,12 @@
 #ifndef _Pineapple
 #define _Pineapple
 
+#include "Pineapple/RenderBuffer.hpp"
+
+class RenderBuffer;
 class Renderer;
 class Scene;
+class TaskRunner;
 
 #define GLFW_INCLUDE_GLU
 #include <GL/glew.h>
@@ -28,6 +32,16 @@ class Pineapple {
 
         /** Scene */
         Scene * scene;
+
+        /**
+         * The current buffer being rendered to.
+         */
+        RenderBuffer * currentBuffer;
+
+        /**
+         * The current task runner.
+         */
+        TaskRunner * runner;
     public:
         /**
          * Initialize a renderer and visualizer.
@@ -56,15 +70,22 @@ class Pineapple {
         Scene * getScene();
 
         /**
-         * Render an image to an array.
+         * Render an image to an array. The result can be obtained by calling getRenderBuffer.
          *
-         * @param imageBuffer  Array to render to
+         * @return  Whether or not the initialization was successful
          */
-        void render(float[]);
+        bool render();
         /**
          * Visualize the scene in the current OpenGL context
          */
         void visualize();
+
+        /**
+         * Return the current image buffer being rendered to.
+         *
+         * @return A pointer to the rendering target buffer
+         */
+        RenderBuffer * getRenderBuffer();
 };
 
 #endif

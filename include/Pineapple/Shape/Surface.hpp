@@ -34,14 +34,28 @@ class Surface: public Object3d {
         Material * material;
 
         /**
-         * The bounding box of the surface.
+         * Sample a position from this surface.
+         *
+         * @param index     The index on the surface.
+         * @param coord     Local coordinate on the surface.
          */
-        BoundingBox bounds;
+        virtual glm::vec4 samplePosition(const glm::uvec3 &, const glm::vec3 &);
 
         /**
-         * Compute the bounding box of this surface.
+         * Sample a normal from this surface.
+         *
+         * @param index     The index on the surface.
+         * @param coord     Local coordinate on the surface.
          */
-        virtual BoundingBox computeBoundingBox();
+        virtual glm::vec4 sampleNormal(const glm::uvec3 &, const glm::vec3 &);
+
+        /**
+         * Sample a uv from this surface.
+         *
+         * @param index     The index on the surface.
+         * @param coord     Local coordinate on the surface.
+         */
+        virtual glm::vec2 sampleUV(const glm::uvec3 &, const glm::vec3 &);
 
         /**
          * Sample a color from this surface.
@@ -49,7 +63,7 @@ class Surface: public Object3d {
          * @param index     Index on the surface.
          * @param coord     Local coordinate on the surface.
          */
-        virtual glm::vec4 sampleColor(glm::uvec3, glm::vec3);
+        virtual glm::vec4 sampleColor(const glm::uvec3 &, const glm::vec3 &);
 };
 
 #endif

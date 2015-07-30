@@ -7,10 +7,10 @@ endef
 NAME=Pineapple
 
 # Programs
-CC=g++ -g -O0
+CC=g++ -g -O0 -std=c++11
 WR=windres
 AR=ar
-FIND=$(shell where find | tr '\\' '/' | grep MinGW | head -n 1)
+FIND=$(shell where find | tr '\\' '/' | grep -i mingw| head -n 1)
 
 # Locations
 BUILD=./build
@@ -32,7 +32,7 @@ SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:
 # Specific links
 LINK_RENDERER=-lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lFreeImage
 LINK_CLI=-l$(NAME)
-LINK_GUI=-l$(NAME) -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lComdlg32 -lFreeImage
+LINK_GUI=-l$(NAME) -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lComdlg32 -lFreeImage -ljsoncpp
 
 all: Folders Resources $(NAME) Libraries cli gui
 	# Finished!
@@ -51,6 +51,8 @@ Resources:
 	cp -r $(RESOURCES) $(BUILD_BIN)
 
 $(NAME):
+	g++ --version
+
 	# Compile source files
 	$(foreach source, \
 		$(SRC_RENDERER_SOURCES), \

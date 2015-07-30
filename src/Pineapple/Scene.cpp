@@ -6,11 +6,18 @@ Scene::Scene(Camera * inCamera) {
 }
 
 void Scene::setCamera(Camera * inCamera) {
+    // Free current camera
+    delete camera;
+    // Set new camera
     camera = inCamera;
 }
 
 void Scene::setCameraViewport(int width, int height) {
     camera->viewport = glm::ivec2(width, height);
+}
+
+void Scene::setCameraPlanes(float near, float far) {
+    camera->planes = glm::vec2(near, far);
 }
 
 void Scene::setCameraPosition(float x, float y, float z) {
@@ -52,4 +59,19 @@ void Scene::addLight(Light * light) {
 void Scene::removeLight(Light * light) {
     //lights.erase(std::remove(lights.begin(), lights.end(), light), lights.end());
     // TODO Implement custom light == operator
+}
+
+void Scene::removeAllLights() {
+    for (int i = 0, l = lights.size(); i < l; i++) {
+        delete lights[i];
+    }
+    lights.clear();
+}
+
+void Scene::computeTransform() {
+    root->computeTransform(glm::mat4(), false);
+}
+
+void Scene::computeBoundingBox(bool recursive) {
+    root->computeBoundingBox(recursive);
 }

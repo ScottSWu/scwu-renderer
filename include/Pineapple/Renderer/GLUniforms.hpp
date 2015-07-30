@@ -10,6 +10,8 @@ class Scene;
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include <vector>
+
 class GLUniforms {
     private:
         glm::vec3 vViewport;
@@ -18,6 +20,10 @@ class GLUniforms {
         glm::mat4 mProjection;
         glm::mat4 mView;
         glm::mat4 mProjectionView;
+
+        int iLightCount;
+        std::vector<glm::vec4> vLightPosition;
+        std::vector<glm::vec4> vLightColor;
     public:
         /**
          * Initialize new uniforms from a scene.

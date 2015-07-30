@@ -2,6 +2,7 @@
 
 #include "Pineapple/Camera.hpp"
 #include "Pineapple/Camera/PerspectiveCamera.hpp"
+#include "Pineapple/Light.hpp"
 #include "Pineapple/Renderer/GLShader.hpp"
 #include "Pineapple/Scene.hpp"
 
@@ -13,6 +14,13 @@ GLUniforms::GLUniforms(Scene * scene, Camera * camera) :
     if (pcamera != 0) {
         vViewport.z = pcamera->fov;
     }
+
+    std::vector<Light *> lights = scene->getLights();
+    iLightCount = (lights.size() > 8) ? 8 : lights.size();
+    for (int i = 0; i < iLightCount; i++) {
+        vLightPosition.push_back(lights[i]->position);
+        vLightColor.push_back(lights[i]->color);
+    }
 }
 
 void GLUniforms::bind(const GLShader & shader) {
@@ -22,4 +30,8 @@ void GLUniforms::bind(const GLShader & shader) {
     glUniformMatrix4fv(shader.mProjectionViewId, 1, GL_FALSE, &mProjectionView[0][0]);
     glUniformMatrix4fv(shader.mProjectionId, 1, GL_FALSE, &mProjection[0][0]);
     glUniformMatrix4fv(shader.mViewId, 1, GL_FALSE, &mView[0][0]);
+
+    glUniform1i(shader.iLightCountId, iLightCount);
+    glUniform4fv(shader.vLightPositionId, iLightCount, &vLightPosition[0][0]);
+    glUniform4fv(shader.vLightColorId, iLightCount, &vLightColor[0][0]);
 }

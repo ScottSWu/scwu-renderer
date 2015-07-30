@@ -4,7 +4,7 @@ uniform sampler2D sTexture0;
 
 uniform int iLightCount;
 uniform vec4 vLightPosition[8];
-uniform vec3 vLightColor[8];
+uniform vec4 vLightColor[8];
 
 in vec4 outPosition;
 in vec4 outNormal;
@@ -24,7 +24,7 @@ void main() {
 		float r = length(dir);
 		float a = max(dot(normalize(dir), N), 0.0);
 		
-		totalColor.rgb += vLightColor[i].xyz * a;
+		totalColor.rgb += 4.0 / (r * r) * vLightColor[i].xyz * a;
 	}
 	
 	vec4 texColor = texture2D(sTexture0, outUV.st);

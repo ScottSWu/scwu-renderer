@@ -1,11 +1,67 @@
 #include "Pineapple/Material.hpp"
 
-Material::Material() {
-    
+#include "Pineapple/Intersection.hpp"
+#include "Pineapple/Material/DiffuseMaterial.hpp"
+#include "Pineapple/Material/GlassMaterial.hpp"
+#include "Pineapple/Ray.hpp"
+#include "Pineapple/Scene.hpp"
+
+Material::Material(std::map<std::string, std::string> parameters) :
+        hasTexture(false), hasColor(false), maskColor(glm::vec4(1.f, 1.f, 1.f, 1.f)) {
+    // Set properties
+    for (auto itr = parameters.begin(), itrEnd = parameters.end(); itr != itrEnd; itr++) {
+        properties[itr->first.c_str()] = itr->second.c_str();
+    }
+
+    if (properties.find("color") != properties.end()) {
+        std::stringstream ss(properties["color"]);
+        std::string component;
+        std::vector<std::string> components;
+        while (std::getline(ss, component, ' ')) {
+            components.push_back(component);
+        }
+
+        glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+        switch (components.size()) {
+            case 4:
+                color.a = std::atof(components[3].c_str());
+                // No break
+            case 3:
+                color.r = std::atof(components[0].c_str());
+                color.g = std::atof(components[1].c_str());
+                color.b = std::atof(components[2].c_str());
+                break;
+            case 2:
+                color.a = std::atof(components[1].c_str());
+                // No break
+            case 1:
+                color.r = std::atof(components[0].c_str());
+                color.g = std::atof(components[0].c_str());
+                color.b = std::atof(components[0].c_str());
+                break;
+            default:
+                break;
+        }
+
+        hasColor = true;
+        maskColor = color;
+    }
 }
 
 Material::~Material() {
 
+}
+
+Material * Material::getMaterial(std::string type, std::map<std::string, std::string> parameters) {
+    if (type == "diffuse") {
+        return new DiffuseMaterial(parameters);
+    }
+    else if (type == "glass") {
+        return new GlassMaterial(parameters);
+    }
+    else {
+        return new Material(parameters);
+    }
 }
 
 void Material::loadTextures() {
@@ -28,6 +84,10 @@ void Material::loadTextures() {
         else {
             break;
         }
+    }
+
+    if (textures.size() > 0) {
+        hasTexture = true;
     }
 }
 
@@ -76,7 +136,7 @@ FIBITMAP * Material::loadImage(const char * filename) {
     return image;
 }
 
-glm::vec4 Material::sampleTexture(int texture, glm::vec2 uv, glm::uvec2 edge) {
+glm::vec4 Material::sampleTexture(int texture, glm::vec2 uv, glm::ivec2 edge) {
     FIBITMAP * image = textures[texture];
     if (image == 0) {
         return glm::vec4();
@@ -87,10 +147,10 @@ glm::vec4 Material::sampleTexture(int texture, glm::vec2 uv, glm::uvec2 edge) {
         glm::vec2 trueCoord = glm::vec2(width * uv.x, height * uv.y);
         glm::vec4 totalColor = glm::vec4();
 
-        glm::uvec2 coord;
+        glm::ivec2 coord;
         float dx, dy, weight;
 
-        coord = glm::uvec2((int) (width * uv.x), (int) (height * uv.y));
+        coord = glm::ivec2((int) (width * uv.x), (int) (height * uv.y));
         dx = trueCoord.x - coord.x;
         dy = trueCoord.y - coord.y;
         weight = (1.f - dx) * (1.f - dy);
@@ -112,7 +172,7 @@ glm::vec4 Material::sampleTexture(int texture, glm::vec2 uv, glm::uvec2 edge) {
     }
 }
 
-glm::vec4 Material::getPixel(FIBITMAP * image, int width, int height, glm::uvec2 coord, glm::uvec2 edge) {
+glm::vec4 Material::getPixel(FIBITMAP * image, int width, int height, glm::ivec2 coord, glm::ivec2 edge) {
     switch (edge.x) {
         default:
         case -1:
@@ -161,4 +221,19 @@ glm::vec4 Material::getPixel(FIBITMAP * image, int width, int height, glm::uvec2
     RGBQUAD color;
     FreeImage_GetPixelColor(image, coord.x, coord.y, &color);
     return glm::vec4((float) color.rgbRed / 255.f, (float) color.rgbGreen / 255.f, (float) color.rgbBlue / 255.f, 1.f);
+}
+
+glm::vec4 Material::sampleColor(std::stack<Ray> & rays, const Ray ray, const Intersection & result,
+        Scene * scene) {
+    auto itrEnd = properties.end();
+    if (hasTexture) {
+        glm::vec2 uv = result.surface->sampleUV(result.index, result.coord);
+        return sampleTexture(0, uv, glm::ivec2(0, 0));
+    }
+    else if (hasColor) {
+        return maskColor;
+    }
+    else {
+        return glm::vec4(1.f, 1.f, 1.f, 1.f);
+    }
 }
