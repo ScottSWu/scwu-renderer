@@ -43,8 +43,8 @@ Raycaster::~Raycaster() {
 void Raycaster::init(RenderBuffer * inBuffer, Scene * inScene) {
     Renderer::init(inBuffer, inScene);
 
-    currentScene->computeBoundingBox(true);
     currentScene->computeTransform();
+    currentScene->computeBoundingBox(true);
 
     // Go by rows for now
 

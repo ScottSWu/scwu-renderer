@@ -5,8 +5,8 @@
 bool IntersectTriangle(glm::vec4 & result, const Ray & ray, const glm::vec4 & v0, const glm::vec4 & v1,
         const glm::vec4 & v2) {
     // Local basis
-    glm::vec3 u(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
-    glm::vec3 v(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
+    glm::vec3 u(v1 - v0);
+    glm::vec3 v(v2 - v0);
     glm::vec3 n(glm::normalize(glm::cross(u, v)));
 
     // Ray - plane intersection
@@ -33,8 +33,9 @@ bool IntersectTriangle(glm::vec4 & result, const Ray & ray, const glm::vec4 & v0
     float lu = glm::dot(l, u);
     float lv = glm::dot(l, v);
 
-    float alpha = (uv * lv - vv * lu) / (uv * uv - uu * vv);
-    float beta = (uv * lu - uu * lv) / (uv * uv - uu * vv);
+    float size = (uv * uv - uu * vv);
+    float alpha = (uv * lv - vv * lu) / size;
+    float beta = (uv * lu - uu * lv) / size;
     float gamma = 1.f - alpha - beta;
 
     if (alpha < 0 || beta < 0 || gamma < 0) {

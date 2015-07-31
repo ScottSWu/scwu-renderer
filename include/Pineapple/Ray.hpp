@@ -17,8 +17,9 @@ class Ray {
          * @param far           The far limit of the ray (default infinity)
          * @param strength      The strength of the ray
          */
-        Ray(int inDepth, glm::vec3 inOrigin, glm::vec3 inDirection, float inNear = 0.f, float inFar =
-                std::numeric_limits<float>::infinity(), float inStrength = 1.f);
+        Ray(int inDepth = 0, glm::vec3 inOrigin = glm::vec3(0.f, 0.f, 0.f),
+                glm::vec3 inDirection = glm::vec3(0.f, 0.f, 1.f), float inNear = 0.f,
+                float inFar = std::numeric_limits<float>::infinity(), float inStrength = 1.f);
         /**
          * Initialize a new ray.
          *

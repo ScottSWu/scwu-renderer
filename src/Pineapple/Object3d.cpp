@@ -64,11 +64,13 @@ BoundingBox Object3d::computeBoundingBox(bool recursive) {
 
 int Object3d::intersect(std::vector<Intersection> & results, const Ray & ray, bool recursive, int limit) {
     int count = 0;
-    if (recursive) {
-        for (int i = 0; i < children.size(); i++) {
-            count += children[i]->intersect(results, ray, recursive, limit);
-            if (limit > 0 && count >= limit) {
-                return count;
+    if (totalBoundingBox.intersects(ray)) {
+        if (recursive) {
+            for (int i = 0; i < children.size(); i++) {
+                count += children[i]->intersect(results, ray, recursive, limit);
+                if (limit > 0 && count >= limit) {
+                    return count;
+                }
             }
         }
     }

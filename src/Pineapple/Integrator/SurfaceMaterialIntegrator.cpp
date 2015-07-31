@@ -6,6 +6,7 @@
 #include "Pineapple/Material.hpp"
 #include "Pineapple/Scene.hpp"
 #include "Pineapple/Ray.hpp"
+#include "Pineapple/Util/FastStack.hpp"
 
 SurfaceMaterialIntegrator::SurfaceMaterialIntegrator() :
         SurfaceIntegrator() {
@@ -18,7 +19,7 @@ SurfaceMaterialIntegrator::~SurfaceMaterialIntegrator() {
 
 glm::vec4 SurfaceMaterialIntegrator::shade(const Ray & ray, Scene * scene) {
     Object3d * root = scene->getRoot();
-    std::stack<Ray> rays;
+    FastStack<Ray> rays;
     glm::vec4 totalColor;
 
     // Add the first ray

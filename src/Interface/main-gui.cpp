@@ -348,6 +348,7 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                     std::map<std::string, std::string> params;
                     params["type"] = "raycast";
                     params["integrator"] = "material";
+                    params["samples"] = "4";
                     p.setRenderer(params);
 
                     // Clear output

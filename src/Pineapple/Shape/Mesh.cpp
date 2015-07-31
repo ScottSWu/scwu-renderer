@@ -3,6 +3,7 @@
 #include "Pineapple/Accel.hpp"
 #include "Pineapple/Intersection.hpp"
 #include "Pineapple/Ray.hpp"
+#include "Pineapple/Util/FastStack.hpp"
 #include "Pineapple/Util/Intersect.hpp"
 
 Mesh::Mesh(Material * inMaterial) :
@@ -216,7 +217,7 @@ int Mesh::intersect(std::vector<Intersection> & results, const Ray & ray, bool r
     float tScale = newDirection.length();
     Ray localRay(ray.depth, newOrigin, newDirection, ray.limits.x, ray.limits.y);
 
-    std::stack<Accel *> accelStack;
+    FastStack<Accel *> accelStack;
     accelStack.push(accelStructure);
 
     while (!accelStack.empty()) {

@@ -14,7 +14,7 @@ DiffuseMaterial::~DiffuseMaterial() {
 
 }
 
-glm::vec4 DiffuseMaterial::sampleColor(std::stack<Ray> & rays, const Ray ray, const Intersection & result,
+glm::vec4 DiffuseMaterial::sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result,
         Scene * scene) {
     glm::vec4 position = result.surface->worldTransform * result.surface->samplePosition(result.index, result.coord);
     glm::vec4 normal = glm::normalize(

@@ -223,7 +223,7 @@ glm::vec4 Material::getPixel(FIBITMAP * image, int width, int height, glm::ivec2
     return glm::vec4((float) color.rgbRed / 255.f, (float) color.rgbGreen / 255.f, (float) color.rgbBlue / 255.f, 1.f);
 }
 
-glm::vec4 Material::sampleColor(std::stack<Ray> & rays, const Ray ray, const Intersection & result,
+glm::vec4 Material::sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result,
         Scene * scene) {
     auto itrEnd = properties.end();
     if (hasTexture) {

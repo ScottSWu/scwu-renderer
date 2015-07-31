@@ -7,7 +7,7 @@ endef
 NAME=Pineapple
 
 # Programs
-CC=g++ -g -O0 -std=c++11
+CC=g++ -g -std=c++11
 WR=windres
 AR=ar
 FIND=$(shell where find | tr '\\' '/' | grep -i mingw| head -n 1)

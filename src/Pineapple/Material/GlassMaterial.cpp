@@ -52,7 +52,7 @@ glm::vec4 GlassMaterial::refract(glm::vec4 direction, glm::vec4 normal) {
     return direction * (-eta) + normal * (eta * cosTheta - (float) sqrt(csp));
 }
 
-glm::vec4 GlassMaterial::sampleColor(std::stack<Ray> & rays, const Ray ray, const Intersection & result,
+glm::vec4 GlassMaterial::sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result,
         Scene * scene) {
     glm::vec4 position = result.surface->worldTransform * result.surface->samplePosition(result.index, result.coord);
     glm::vec4 normal = glm::normalize(

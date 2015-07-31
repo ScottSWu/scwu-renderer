@@ -11,6 +11,7 @@ class Scene;
 
 #include <stack>
 #include <string>
+#include "Pineapple/Util/FastStack.hpp"
 
 #include "Pineapple/Globals.hpp"
 
@@ -72,7 +73,7 @@ class GlassMaterial: public Material {
          * @param scene     The intersected scene
          * @return      The sampled color
          */
-        glm::vec4 sampleColor(std::stack<Ray> & rays, const Ray ray, const Intersection & result, Scene * scene);
+        glm::vec4 sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result, Scene * scene);
 };
 
 #endif

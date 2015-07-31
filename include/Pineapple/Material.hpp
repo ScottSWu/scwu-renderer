@@ -15,6 +15,7 @@ class Scene;
 #include <string>
 #include <sstream>
 #include <vector>
+#include "Pineapple/Util/FastStack.hpp"
 
 class Material {
     private:
@@ -106,7 +107,7 @@ class Material {
          * @param scene     The intersected scene
          * @return      The sampled color
          */
-        virtual glm::vec4 sampleColor(std::stack<Ray> & rays, const Ray ray, const Intersection & result,
+        virtual glm::vec4 sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result,
                 Scene * scene);
 };
 

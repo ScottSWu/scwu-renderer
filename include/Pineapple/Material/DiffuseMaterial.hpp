@@ -10,6 +10,7 @@ class Scene;
 #include <glm/glm.hpp>
 
 #include <stack>
+#include "Pineapple/Util/FastStack.hpp"
 
 class DiffuseMaterial: public Material {
     public:
@@ -32,7 +33,7 @@ class DiffuseMaterial: public Material {
          * @param scene     The intersected scene
          * @return      The sampled color
          */
-        glm::vec4 sampleColor(std::stack<Ray> & rays, const Ray ray, const Intersection & result, Scene * scene);
+        glm::vec4 sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result, Scene * scene);
 };
 
 #endif
