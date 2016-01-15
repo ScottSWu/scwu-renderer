@@ -294,7 +294,7 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                             }
                         }
                         else if (hasExtension(filename, len, ".json", 5)) {
-                            LoadJSONFile(s, filename, foldername);
+                            LoadJSONFile(s, filename);
                             // Set the proper window size afterwards, accounting for menu bar(?)
                             Camera * c = p.getScene()->getCamera();
                             glfwSetWindowSize(window, c->viewport.x, c->viewport.y + 25);
@@ -379,6 +379,23 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
                     std::thread(sideRender, hwnd).detach();
                 }
                     break;
+                case ID_MENU_RENDER_PATHTRACING: {
+                    std::map<std::string, std::string> params;
+                    params["type"] = "pathtrace";
+                    params["cores"] = std::to_string(std::thread::hardware_concurrency());
+                    params["samples"] = "10";
+                    p.setRenderer(params);
+
+                    // Clear output
+                    glDeleteTextures(1, &texId);
+                    glDeleteFramebuffers(1, &fbId);
+                    texId = 0;
+                    fbId = 0;
+                    output = new RenderBuffer();
+
+                    std::thread(sideRender, hwnd).detach();
+                    break;
+                }
 
                 case ID_MENU_VIEW_SCENE: {
                     currentView = 0;

@@ -1,7 +1,9 @@
 #ifndef _Pineapple_Object_GLShader
 #define _Pineapple_Object_GLShader
 
+#include <windows.h>
 #include <GL/glew.h>
+#include <GL/gl.h>
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>

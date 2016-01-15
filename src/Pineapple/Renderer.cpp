@@ -43,3 +43,7 @@ bool Renderer::hasTask() {
 RenderTask * Renderer::getTask() {
     return new RenderTask(1, 1, 0, 0, 0);
 }
+
+int Renderer::getTaskCount() {
+    return 0;
+}

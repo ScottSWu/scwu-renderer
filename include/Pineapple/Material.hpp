@@ -18,7 +18,7 @@ class Scene;
 #include "Pineapple/Util/FastStack.hpp"
 
 class Material {
-    private:
+    protected:
         /**
          * Load an image from a file.
          *
@@ -36,7 +36,33 @@ class Material {
          * @param edge      The edge behavior for out-of-bounds coordinates
          * @return      The color of the pixel
          */
-        glm::vec4 getPixel(FIBITMAP *, int, int, glm::ivec2, glm::ivec2);
+        glm::vec4 getPixel(FIBITMAP *, int, int, glm::ivec2, const glm::ivec2 &);
+
+        /**
+         * Parse a color from a space separated string of values.
+         *
+         * @param string    The string to parse from
+         * @return      The parsed color
+         */
+        static glm::vec4 getColor(std::string);
+
+        /**
+         * Reflect a direction about a normal.
+         *
+         * @param direction     The incoming direction
+         * @param normal        The surface normal
+         * @return      The reflected direction
+         */
+        static glm::vec4 reflect(glm::vec4, glm::vec4);
+        /**
+         * Refract a direction about a normal (including internal reflection).
+         *
+         * @param direction     The incoming direction
+         * @param normal        The surface normal
+         * @param ior           The index of refraction
+         * @return      The refracted direction
+         */
+        static glm::vec4 refract(glm::vec4, glm::vec4, float);
     public:
         /**
          * Initialize a new material.
@@ -96,7 +122,7 @@ class Material {
          * @param edge      Edge behavior for each coordinate (-1 is empty, 0 is clamp, 1 is repeat)
          * @return          The sampled color, or empty if invalid
          */
-        virtual glm::vec4 sampleTexture(int texture, glm::vec2 uv, glm::ivec2 edge = glm::ivec2());
+        virtual glm::vec4 sampleTexture(int texture, const glm::vec2 & uv, const glm::ivec2 & edge = glm::ivec2());
 
         /**
          * Sample a color from this material from an intersection result.
@@ -107,8 +133,7 @@ class Material {
          * @param scene     The intersected scene
          * @return      The sampled color
          */
-        virtual glm::vec4 sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result,
-                Scene * scene);
+        virtual glm::vec4 sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result, Scene * scene);
 };
 
 #endif

@@ -7,6 +7,7 @@
 #include "Pineapple/Renderer.hpp"
 #include "Pineapple/Renderer/GLRenderer.hpp"
 #include "Pineapple/Renderer/Raycaster.hpp"
+#include "Pineapple/Renderer/PathTracer.hpp"
 #include "Pineapple/RenderTask.hpp"
 #include "Pineapple/Scene.hpp"
 #include "Pineapple/TaskRunner.hpp"
@@ -42,6 +43,9 @@ bool Pineapple::setRenderer(std::map<std::string, std::string> parameters) {
     }
     else if (type == "raycast") {
         renderer = new Raycaster(parameters);
+    }
+    else if (type == "pathtrace") {
+        renderer = new PathTracer(parameters);
     }
     else {
         return false;

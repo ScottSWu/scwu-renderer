@@ -37,22 +37,6 @@ class GlassMaterial: public Material {
          * Max recursion depth
          */
         int maxDepth;
-        /**
-         * Reflect a direction about a normal.
-         *
-         * @param direction     The incoming direction
-         * @param normal        The surface normal
-         * @return      The reflected direction
-         */
-        glm::vec4 reflect(glm::vec4, glm::vec4);
-        /**
-         * Refract a direction about a normal (including internal reflection).
-         *
-         * @param direction     The incoming direction
-         * @param normal        The surface normal
-         * @return      The refracted direction
-         */
-        glm::vec4 refract(glm::vec4, glm::vec4);
     public:
         /**
          * Initialize a new diffuse material.

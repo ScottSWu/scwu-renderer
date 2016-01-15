@@ -32,6 +32,10 @@ class MPTaskRunner: public TaskRunner {
          * Notification condition variable.
          */
         std::condition_variable cv;
+        /**
+         * Tasks run
+         */
+        int processed;
     public:
         /**
          * Initialize a new task runner.
@@ -52,6 +56,12 @@ class MPTaskRunner: public TaskRunner {
          * Run tasks.
          */
         void run();
+
+        /**
+         * Get the current progress of the runner.
+         * @return  Progress of the task runner as an integer out of 1000
+         */
+        int getProgress();
 };
 
 #endif

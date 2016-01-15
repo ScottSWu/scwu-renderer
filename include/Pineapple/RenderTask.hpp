@@ -5,6 +5,8 @@
  * Defines a rendering task. Use standard types only so everything can be easily serialized or something.
  */
 class RenderTask {
+    private:
+        static int generateId;
     public:
         /**
          * Initialize a new render task.
@@ -14,8 +16,9 @@ class RenderTask {
          * @param x         X offset of the render task
          * @param y         Y offset of the render task
          * @param samples   The number of samples to perform
+         * @param seed      The seed for random number generation
          */
-        RenderTask(int inWidth, int inHeight, int inX, int inY, int inSamples);
+        RenderTask(int inWidth, int inHeight, int inX, int inY, int inSamples, int inSeed = 0);
 
         /**
          * Destructor.
@@ -51,6 +54,16 @@ class RenderTask {
          * Result data.
          */
         float * data;
+
+        /**
+         * Unique task id.
+         */
+        int id;
+
+        /**
+         * Task seed.
+         */
+        int seed;
 };
 
 #endif

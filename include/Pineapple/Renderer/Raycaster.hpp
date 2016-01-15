@@ -20,6 +20,10 @@ class Raycaster: public Renderer {
          * Number of samples.
          */
         int samples;
+        /**
+         * Total tasks initialized.
+         */
+        int totalTasks;
     public:
         /**
          * Initialize a new raycasting renderer.
@@ -68,6 +72,13 @@ class Raycaster: public Renderer {
          * @return      An unfinished task
          */
         RenderTask * getTask();
+
+        /**
+         * Returns the total number of tasks.
+         *
+         * @return      The total number of tasks
+         */
+        int getTaskCount();
 };
 
 #endif

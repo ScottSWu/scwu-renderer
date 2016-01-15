@@ -4,7 +4,7 @@
 #include "Pineapple/RenderTask.hpp"
 
 TaskRunner::TaskRunner(Renderer * inRenderer, std::map<std::string, std::string> parameters) :
-        currentRenderer(inRenderer) {
+        currentRenderer(inRenderer), processed(0) {
 
 }
 
@@ -17,5 +17,10 @@ void TaskRunner::run() {
         RenderTask * task = currentRenderer->getTask();
         currentRenderer->render(task);
         currentRenderer->process(task);
+        processed++;
     }
+}
+
+int TaskRunner::getProgress() {
+    return processed * 1000 / currentRenderer->getTaskCount();
 }

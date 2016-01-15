@@ -1,0 +1,21 @@
+{
+	"camera": {
+		"width": 640,
+		"height": 640,
+		"type": "perspective",
+		"fov": 54.6,
+		"position": [ 0, 1, 2.8 ],
+		"target": [ 0, 1, 0 ]
+	},
+	
+	"children": [
+		{
+			"type": "mesh",
+			"file": "./sample/CornellBoxPT.obj"
+		},
+		{
+			"type": "mesh",
+			"file": "./sample/GlassSpheresPT.obj"
+		}
+	]
+}

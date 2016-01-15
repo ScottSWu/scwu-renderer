@@ -15,6 +15,10 @@ class TaskRunner {
          * Renderer used.
          */
         Renderer * currentRenderer;
+        /**
+         * Tasks run
+         */
+        int processed;
     public:
         /**
          * Initialize a new task runner.
@@ -33,6 +37,12 @@ class TaskRunner {
          * Run all tasks provided by the renderer.
          */
         virtual void run();
+
+        /**
+         * Get the current progress of the runner.
+         * @return  Progress of the task runner as an integer out of 1000
+         */
+        virtual int getProgress();
 };
 
 #endif

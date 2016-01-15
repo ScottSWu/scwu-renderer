@@ -101,6 +101,13 @@ class Renderer {
          * @return      An unfinished task
          */
         virtual RenderTask * getTask();
+
+        /**
+         * Returns the total number of tasks.
+         *
+         * @return      The total number of tasks
+         */
+        virtual int getTaskCount();
 };
 
 #endif

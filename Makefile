@@ -1,16 +1,11 @@
-define \n
-
-
-endef
-
 # Project
 NAME=Pineapple
 
 # Programs
-CC=g++ -g -std=c++11
+CC="C:\msys64\mingw64\bin\x86_64-w64-mingw32-g++.exe"
+CFLAGS=-std=c++11 -g -O3
 WR=windres
-AR=ar
-FIND=$(shell where find | tr '\\' '/' | grep -i mingw| head -n 1)
+AR="C:\msys64\mingw64\bin\ar.exe"
 
 # Locations
 BUILD=./build
@@ -26,13 +21,13 @@ BUILD_OBJ=$(BUILD)/obj
 SRC_INTERFACE=$(SRC)/Interface
 SRC_RENDERER=$(SRC)/$(NAME)
 
-SRC_RENDERER_SOURCES=$(shell $(FIND) "$(SRC_RENDERER)" -name "*.cpp" -type f)
+SRC_RENDERER_SOURCES=$(wildcard $(SRC_RENDERER)/*.cpp)
 SRC_RENDERER_OBJECTS=$(addprefix $(BUILD_OBJ)/, $(notdir $(SRC_RENDERER_SOURCES:.cpp=.o)))
 
 # Specific links
-LINK_RENDERER=-lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lFreeImage
-LINK_CLI=-l$(NAME)
-LINK_GUI=-l$(NAME) -lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lComdlg32 -lFreeImage -ljsoncpp
+LINK_RENDERER=-lglfw3 -lopengl32 -lglu32 -lgdi32 -lglew32 -lFreeImage -ljsoncpp -lstdc++
+LINK_CLI=-l$(NAME) $(LINK_RENDERER)
+LINK_GUI=-l$(NAME) $(LINK_RENDERER) -lComdlg32
 
 all: Folders Resources $(NAME) Libraries cli gui
 	# Finished!
@@ -50,35 +45,27 @@ Resources:
 	# Copy resources
 	cp -r $(RESOURCES) $(BUILD_BIN)
 
-$(NAME):
-	g++ --version
-
-	# Compile source files
-	$(foreach source, \
-		$(SRC_RENDERER_SOURCES), \
-		$(CC) -c -I "$(INCLUDE)" "$(source)" -o "$(BUILD_OBJ)/$(notdir $(source:.cpp=.o))" \
-	;${\n})
-	
-	# Compile shared library
-	# $(CC) -o "$(BUILD_BIN)/$(NAME).dll" -shared $(SRC_RENDERER_OBJECTS)
-
+$(NAME): $(SRC_RENDERER_OBJECTS)
 	# Compile static library
 	$(AR) rcs "$(BUILD_BIN)/lib$(NAME).a" $(SRC_RENDERER_OBJECTS)
+
+$(BUILD_OBJ)/%.o: $(SRC_RENDERER)/%.cpp
+	$(CC) $(CFLAGS) -c -I "$(INCLUDE)" "$<" -o "$@"
 
 Libraries:
 	# Copy dynamic Libraries
 	cp $(LIBRARYD)/* $(BUILD_BIN)
 
-cli:
+cli: $(NAME)
 	# Make cli
-	$(CC) -o "$(BUILD_BIN)/$(NAME)-cli.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" "$(SRC_INTERFACE)/main-cli.cpp" $(LINK_CLI)
+	$(CC) $(CFLAGS) -o "$(BUILD_BIN)/$(NAME)-cli.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" "$(SRC_INTERFACE)/main-cli.cpp" $(LINK_CLI)
 
-gui:
+gui: $(NAME)
 	# Compile resource file
 	$(WR) -I "$(INCLUDE)" "$(SRC_INTERFACE)/resources.rc" "$(BUILD_OBJ)/resources.o"
 	
 	# Make gui
-	$(CC) -o "$(BUILD_BIN)/$(NAME)-gui.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" -L "$(LIBRARYD)" -L "$(LIBRARYS)" "$(SRC_INTERFACE)/main-gui.cpp" "$(BUILD_OBJ)/resources.o" $(LINK_GUI)
+	$(CC) $(CFLAGS) -o "$(BUILD_BIN)/$(NAME)-gui.exe" -I "$(INCLUDE)" -L "$(BUILD_BIN)" -L "$(LIBRARYD)" -L "$(LIBRARYS)" "$(SRC_INTERFACE)/main-gui.cpp" "$(BUILD_OBJ)/resources.o" $(LINK_GUI)
 
 clean:
 	# Cleaning build

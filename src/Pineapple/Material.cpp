@@ -1,6 +1,8 @@
 #include "Pineapple/Material.hpp"
 
 #include "Pineapple/Intersection.hpp"
+#include "Pineapple/Material/BRDF.hpp"
+#include "Pineapple/Material/BxDF.hpp"
 #include "Pineapple/Material/DiffuseMaterial.hpp"
 #include "Pineapple/Material/GlassMaterial.hpp"
 #include "Pineapple/Ray.hpp"
@@ -14,34 +16,7 @@ Material::Material(std::map<std::string, std::string> parameters) :
     }
 
     if (properties.find("color") != properties.end()) {
-        std::stringstream ss(properties["color"]);
-        std::string component;
-        std::vector<std::string> components;
-        while (std::getline(ss, component, ' ')) {
-            components.push_back(component);
-        }
-
-        glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f);
-        switch (components.size()) {
-            case 4:
-                color.a = std::atof(components[3].c_str());
-                // No break
-            case 3:
-                color.r = std::atof(components[0].c_str());
-                color.g = std::atof(components[1].c_str());
-                color.b = std::atof(components[2].c_str());
-                break;
-            case 2:
-                color.a = std::atof(components[1].c_str());
-                // No break
-            case 1:
-                color.r = std::atof(components[0].c_str());
-                color.g = std::atof(components[0].c_str());
-                color.b = std::atof(components[0].c_str());
-                break;
-            default:
-                break;
-        }
+        glm::vec4 color = getColor(properties["color"]);
 
         hasColor = true;
         maskColor = color;
@@ -52,6 +27,39 @@ Material::~Material() {
 
 }
 
+glm::vec4 Material::getColor(std::string string) {
+    std::stringstream ss(string);
+    std::string component;
+    std::vector<std::string> components;
+    while (std::getline(ss, component, ' ')) {
+        components.push_back(component);
+    }
+
+    glm::vec4 color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    switch (components.size()) {
+        case 4:
+            color.a = std::atof(components[3].c_str());
+            // No break
+        case 3:
+            color.r = std::atof(components[0].c_str());
+            color.g = std::atof(components[1].c_str());
+            color.b = std::atof(components[2].c_str());
+            break;
+        case 2:
+            color.a = std::atof(components[1].c_str());
+            // No break
+        case 1:
+            color.r = std::atof(components[0].c_str());
+            color.g = std::atof(components[0].c_str());
+            color.b = std::atof(components[0].c_str());
+            break;
+        default:
+            break;
+    }
+
+    return color;
+}
+
 Material * Material::getMaterial(std::string type, std::map<std::string, std::string> parameters) {
     if (type == "diffuse") {
         return new DiffuseMaterial(parameters);
@@ -59,9 +67,38 @@ Material * Material::getMaterial(std::string type, std::map<std::string, std::st
     else if (type == "glass") {
         return new GlassMaterial(parameters);
     }
+    else if (type == "BRDF") {
+        return new BRDF(parameters);
+    }
+    else if (type == "BxDF") {
+        return new BxDF(parameters);
+    }
     else {
         return new Material(parameters);
     }
+}
+
+glm::vec4 Material::reflect(glm::vec4 direction, glm::vec4 normal) {
+    return direction - 2 * (glm::dot(normal, direction)) * normal;
+}
+
+glm::vec4 Material::refract(glm::vec4 direction, glm::vec4 normal, float ior) {
+    direction = -direction;
+
+    float eta = 1.f / ior;
+    float dir = glm::dot(direction, normal);
+    if (dir > 0) { // Incoming
+
+    }
+    else { // Outgoing
+        eta = ior;
+        normal = -normal;
+    }
+
+    float cosTheta = glm::dot(direction, normal);
+    float csp = 1.f - eta * eta * (1.f - cosTheta * cosTheta);
+
+    return direction * (-eta) + normal * (eta * cosTheta - (float) sqrt(csp));
 }
 
 void Material::loadTextures() {
@@ -136,7 +173,7 @@ FIBITMAP * Material::loadImage(const char * filename) {
     return image;
 }
 
-glm::vec4 Material::sampleTexture(int texture, glm::vec2 uv, glm::ivec2 edge) {
+glm::vec4 Material::sampleTexture(int texture, const glm::vec2 & uv, const glm::ivec2 & edge) {
     FIBITMAP * image = textures[texture];
     if (image == 0) {
         return glm::vec4();
@@ -172,7 +209,7 @@ glm::vec4 Material::sampleTexture(int texture, glm::vec2 uv, glm::ivec2 edge) {
     }
 }
 
-glm::vec4 Material::getPixel(FIBITMAP * image, int width, int height, glm::ivec2 coord, glm::ivec2 edge) {
+glm::vec4 Material::getPixel(FIBITMAP * image, int width, int height, glm::ivec2 coord, const glm::ivec2 & edge) {
     switch (edge.x) {
         default:
         case -1:
@@ -223,8 +260,7 @@ glm::vec4 Material::getPixel(FIBITMAP * image, int width, int height, glm::ivec2
     return glm::vec4((float) color.rgbRed / 255.f, (float) color.rgbGreen / 255.f, (float) color.rgbBlue / 255.f, 1.f);
 }
 
-glm::vec4 Material::sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result,
-        Scene * scene) {
+glm::vec4 Material::sampleColor(FastStack<Ray> & rays, const Ray ray, const Intersection & result, Scene * scene) {
     auto itrEnd = properties.end();
     if (hasTexture) {
         glm::vec2 uv = result.surface->sampleUV(result.index, result.coord);

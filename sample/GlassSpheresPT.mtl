@@ -1,0 +1,17 @@
+# Blender MTL File: 'CornellBox-glass.blend'
+# Material Count: 2
+
+newmtl Refl
+	type BxDF
+    subtype glass
+	color 1.0 1.0 1.0
+    intensity -1.0
+    altIntensity 1.0
+
+newmtl Refr
+	type BxDF
+    subtype glass
+	color 1.0 1.0 1.0
+    intensity 1.0
+    altIntensity -1.0
+    attribute 1.5
